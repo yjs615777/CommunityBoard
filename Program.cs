@@ -1,5 +1,6 @@
 using CommunityBoard.Data;
 using Microsoft.EntityFrameworkCore;
+using CommunityBoard.Middleware;
 
 namespace CommunityBoard
 {
@@ -39,7 +40,7 @@ namespace CommunityBoard
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseMiddleware<GlobalExceptionMiddleware>(); //  전역 예외 처리 미들웨어 등록
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
