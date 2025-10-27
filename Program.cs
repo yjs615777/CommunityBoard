@@ -12,11 +12,25 @@ namespace CommunityBoard
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             // DbContext µî·Ï (DI)
             builder.Services.AddDbContext<CommunityContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
             var app = builder.Build();
+
+
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommunityBoard API v1");
+                });
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
