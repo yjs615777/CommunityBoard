@@ -5,7 +5,7 @@ namespace CommunityBoard
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +32,13 @@ namespace CommunityBoard
             app.UseRouting();
 
             app.UseAuthorization();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<CommunityContext>();
+                await SeedData.InitializeAsync(db);
+            }
+
 
             app.MapControllerRoute(
                 name: "default",
