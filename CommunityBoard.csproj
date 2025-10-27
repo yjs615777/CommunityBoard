@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Response\" />
-    <Folder Include="Contracts\Requests\" />
     <Folder Include="Services\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
