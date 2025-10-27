@@ -1,3 +1,6 @@
+using CommunityBoard.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace CommunityBoard
 {
     public class Program
@@ -8,6 +11,10 @@ namespace CommunityBoard
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // DbContext µî·Ï (DI)
+            builder.Services.AddDbContext<CommunityContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
             var app = builder.Build();
 
