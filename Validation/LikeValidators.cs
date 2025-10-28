@@ -27,4 +27,5 @@ namespace CommunityBoard.Validation
             RuleFor(x => x.CommentId).GreaterThan(0);
             RuleFor(x => x.UserId).GreaterThan(0);
         }
+    }
 }

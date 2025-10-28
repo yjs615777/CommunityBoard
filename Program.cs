@@ -1,7 +1,8 @@
 using CommunityBoard.Data;
-using Microsoft.EntityFrameworkCore;
-using CommunityBoard.Middleware;
+using CommunityBoard.Filters;
 using CommunityBoard.Mapping;
+using CommunityBoard.Middleware;
+using Microsoft.EntityFrameworkCore;
     
 namespace CommunityBoard
 {
@@ -9,7 +10,13 @@ namespace CommunityBoard
     {
         public static async Task Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ValidationFilter>(); // ← 전역 필터 등록
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -21,9 +28,11 @@ namespace CommunityBoard
             builder.Services.AddDbContext<CommunityContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+            builder.Services.AddAutoMapper(typeof(CommunityMappingProfile));
+
             var app = builder.Build();
             
-            builder.Services.AddAutoMapper(typeof(CommunityMappingProfile));
+            
 
             if (app.Environment.IsDevelopment())
             {
@@ -33,6 +42,7 @@ namespace CommunityBoard
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommunityBoard API v1");
                 });
             }
+  
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
