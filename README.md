@@ -39,3 +39,19 @@ Request/Response DTO ,Paging DTO정의
 Swagger UI 등록 코드 추가
 
 느낀점: DB, Swagger, DTO — 세 가지가 갖춰지니 비로소 프로젝트 뼈대가 완성된 느낌이었다.
+
+3일차
+Service 계층 구현
+IPostService, ICommentService, ILikeService 인터페이스 및 구현 클래스 추가
+CRUD 및 비즈니스 로직 (조회, 등록, 수정, 삭제) 작성
+Repository 계층과 연결 및 의존성 주입 완료
+공통 구조 개선 (Result & Paging)
+Result<T> 구조를 개선하여 ApiError 포함 → API 응답 일관성 확보
+PageQuery, PagedResult 리팩터링 → Skip / Take 기반 페이지네이션 구현
+query.Page, query.Size를 이용한 효율적 데이터 페이징 처리
+Validation & Filter 연동
+FluentValidation 기반의 입력 검증 로직 유지
+ValidationFilter를 통해 전역 검증 에러를 Result<ApiError> 형태로 통일
+
+느낀점: 단순 CRUD가 아니라, 응답 포맷, 검증, 매핑, 구조적 일관성을 고려하니 코드가 훨씬 체계적으로 변했다.
+Result<T>와 PagedResult를 직접 리팩터링하면서, 실무 서비스 로직의 확장성 개념을 조금 체감했다.
