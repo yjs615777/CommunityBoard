@@ -1,7 +1,8 @@
 using CommunityBoard.Data;
 using Microsoft.EntityFrameworkCore;
 using CommunityBoard.Middleware;
-
+using CommunityBoard.Mapping;
+    
 namespace CommunityBoard
 {
     public class Program
@@ -21,8 +22,8 @@ namespace CommunityBoard
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
             var app = builder.Build();
-
-
+            
+            builder.Services.AddAutoMapper(typeof(CommunityMappingProfile));
 
             if (app.Environment.IsDevelopment())
             {
