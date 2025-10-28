@@ -15,7 +15,7 @@ ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이
 같은 사용자는 한 댓글에 한 번만 좋아요를 누를 수 있습니다 (중복방지 로직 포함).
 - 관리자(Admin) — Role 기반 권한(Role: User / Admin) 구조로 관리 기능 확장 가능.
 
-개발일지
+## 개발일지
 
 1일차
 프로젝트 생성 CommunityBoard
@@ -23,3 +23,19 @@ Miro 이용해 UML Diagram 완성
 Figma로 기본 레이아웃 디자인 초안 완성
 Entities 폴더 구성 완료 (User, Post, Comment, Like)
 Models → Entities 폴더 구조 개편
+
+느낀점: UML 다이어그램과 Figma 디자인을 통해 전체 흐름을 미리 구상해보니,
+설계가 얼마나 중요한지 깨달았다
+Models → Entities 폴더 구조 개편으로 코드의 역할이 명확해지고
+프로젝트가 훨씬 깔끔해졌다
+
+2일차 
+DB 연결 및 마이그레이션
+CommunityContext 생성 및 MSSQL LocalDB 연결 성공
+SQL Server Express 연결 오류(Error 26) → LocalDB로 전환하여 해결
+→ 로컬 개발 환경에서는 LocalDB,
+→ 배포 시 AWS RDS 또는 Azure SQL로 교체 예정
+Request/Response DTO ,Paging DTO정의
+Swagger UI 등록 코드 추가
+
+느낀점: DB, Swagger, DTO — 세 가지가 갖춰지니 비로소 프로젝트 뼈대가 완성된 느낌이었다.
