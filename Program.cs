@@ -2,6 +2,7 @@ using CommunityBoard.Data;
 using CommunityBoard.Filters;
 using CommunityBoard.Mapping;
 using CommunityBoard.Middleware;
+using CommunityBoard.Repositories;
 using Microsoft.EntityFrameworkCore;
     
 namespace CommunityBoard
@@ -20,9 +21,13 @@ namespace CommunityBoard
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            // Swagger(OpenAPI) 관련 서비스 등록
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            // Repository 계층 의존성 주입 (DI 등록)
+            builder.Services.AddScoped<IPostRepository, PostRepository>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
             // DbContext 등록 (DI)
             builder.Services.AddDbContext<CommunityContext>(options =>
