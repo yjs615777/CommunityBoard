@@ -3,6 +3,7 @@ using CommunityBoard.Filters;
 using CommunityBoard.Mapping;
 using CommunityBoard.Middleware;
 using CommunityBoard.Repositories;
+using CommunityBoard.Services;
 using Microsoft.EntityFrameworkCore;
     
 namespace CommunityBoard
@@ -28,6 +29,10 @@ namespace CommunityBoard
             builder.Services.AddScoped<IPostRepository, PostRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+            // Service 계층 의존성 주입 (DI 등록)
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<ILikeService, LikeService>();
 
             // DbContext 등록 (DI)
             builder.Services.AddDbContext<CommunityContext>(options =>
