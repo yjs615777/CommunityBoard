@@ -34,6 +34,8 @@ namespace CommunityBoard
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<ILikeService, LikeService>();
 
+
+
             // DbContext 등록 (DI)
             builder.Services.AddDbContext<CommunityContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
@@ -41,8 +43,10 @@ namespace CommunityBoard
             builder.Services.AddAutoMapper(typeof(CommunityMappingProfile));
 
             var app = builder.Build();
-            
-            
+            // Attribute Routing 기반 API 컨트롤러 활성화
+            app.MapControllers();
+
+
 
             if (app.Environment.IsDevelopment())
             {
