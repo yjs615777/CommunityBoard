@@ -1,10 +1,11 @@
 ﻿using CommunityBoard.Common;
 using CommunityBoard.Contracts.Common;
 using CommunityBoard.Contracts.Requests;
+using CommunityBoard.Contracts.Response;
 using CommunityBoard.Entities;
 using CommunityBoard.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+
 
 namespace CommunityBoard.Services
 {
@@ -12,27 +13,54 @@ namespace CommunityBoard.Services
     {
         private readonly IPostRepository _posts = posts;
 
-        public async Task<Result<PagedResult<Post>>> GetPagedAsync(PageQuery query, CancellationToken ct = default)
+        public async Task<Result<PagedResult<PostListItemDto>>> GetPagedAsync(PageQuery query, CancellationToken ct = default)
         {
             var q = _posts.Query()
-                          .OrderByDescending(p => p.CreatedAt);
+                  .AsNoTracking()
+                  .Include(p => p.Author)
+                  .OrderByDescending(p => p.CreatedAt);
 
             var total = await q.CountAsync(ct);
 
             var items = await q.Skip(query.Skip)
                                .Take(query.PageSize)
+                               .Select(p => new PostListItemDto(
+                                   p.Id,
+                                   p.Title,
+                                   p.Author.Name,
+                                   p.IsPinned,
+                                   p.CreatedAt,
+                                   p.ViewCount,
+                                   0 // TODO: 댓글 수는 후속 작업에서 채우기
+                               ))
                                .ToListAsync(ct);
 
-            var page = new PagedResult<Post>(items, total, query.Page, query.PageSize);
-            return Result<PagedResult<Post>>.Ok(page);
+            return Result<PagedResult<PostListItemDto>>.Ok(
+                new PagedResult<PostListItemDto>(items, total, query.Page, query.PageSize));
         }
 
-        public async Task<Result<Post>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<Result<PostDetailDto>> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            var post = await _posts.GetByIdAsync(id, ct);
-            if (post is null)
-                return Result<Post>.Fail("not_found", $"Post #{id} not found.");
-            return Result<Post>.Ok(post);
+            var p = await _posts.Query()
+              .AsNoTracking()
+              .Include(x => x.Author)
+              .FirstOrDefaultAsync(x => x.Id == id, ct);
+
+            if (p is null) return Result<PostDetailDto>.Fail("not_found", $"Post #{id} not found.");
+
+            var dto = new PostDetailDto(
+                p.Id,
+                p.Title,
+                p.Content,
+                p.CategoryId,      
+                p.IsPinned,
+                p.CreatedAt,
+                p.UpdatedAt,
+                p.ViewCount,
+                p.Author.Name,     
+                Array.Empty<CommentDto>()
+            );
+            return Result<PostDetailDto>.Ok(dto);
         }
 
         public async Task<Result<int>> CreateAsync(CreatePostRequest req, CancellationToken ct = default)

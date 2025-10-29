@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CommunityBoard.Controllers.Api
 {
     [ApiController]
-    [Route("api/controller")]
-    public class CommentController(ICommentService service , IMapper mapper) : ControllerBase
+    [Route("api/[controller]")]
+    public class CommentsController(ICommentService service , IMapper mapper) : ControllerBase
     {
         private readonly ICommentService _service = service;
         private readonly IMapper _mapper = mapper;
@@ -34,7 +34,15 @@ namespace CommunityBoard.Controllers.Api
             var res = await _service.GetByIdAsync(id, ct);
             if (!res.Success) return NotFound(res);
 
-            var dto = _mapper.Map<CommentDto>(res.Data!);
+            var c = res.Data!; // ← Author, Likes는 서비스에서 Include로 로드되어 있어야 함
+            var dto = new CommentDto(
+                c.Id,
+                c.Author?.Name ?? "",
+                c.Content,
+                c.CreatedAt,
+                c.Likes?.Count ?? 0,
+                false
+            );
             return Ok(Result<CommentDto>.Ok(dto));
         }
 

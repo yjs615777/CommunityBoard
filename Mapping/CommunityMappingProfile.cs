@@ -13,6 +13,7 @@ namespace CommunityBoard.Mapping
                 .ForMember(d => d.AuthorName, m => m.MapFrom(s => s.Author.Name))
                 .ForMember(d => d.CommentCount, m => m.Ignore()); // 서비스에서 집계
 
+
             // Post → 상세용
             CreateMap<Post, PostDetailDto>()
                 .ForMember(d => d.AuthorName, m => m.MapFrom(s => s.Author.Name))

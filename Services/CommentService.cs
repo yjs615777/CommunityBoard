@@ -2,6 +2,7 @@
 using CommunityBoard.Contracts.Requests;
 using CommunityBoard.Entities;
 using CommunityBoard.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunityBoard.Services
 {
@@ -39,10 +40,16 @@ namespace CommunityBoard.Services
 
         public async Task<Result<Comment>> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            var entity = await _comments.GetByIdAsync(id, ct);
-            if (entity is null)
+            var c = await _comments.Query()                // ICommentRepository.Query()
+                .AsNoTracking()
+                .Include(x => x.Author)                    // ← Author 로드
+                .Include(x => x.Likes)                     // ← Likes 로드
+                .FirstOrDefaultAsync(x => x.Id == id, ct);
+
+            if (c is null)
                 return Result<Comment>.Fail("not_found", $"Comment #{id} not found.");
-            return Result<Comment>.Ok(entity);
+
+            return Result<Comment>.Ok(c);
         }
     }
 }

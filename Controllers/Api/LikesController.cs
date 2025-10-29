@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityBoard.Controllers.Api;
 [ApiController]
-[Route("api/controller")]
-public class LikeController(ILikeService service) : ControllerBase
+[Route("api/[controller]")]
+public class LikesController(ILikeService service) : ControllerBase
 {
     private readonly ILikeService _service = service;
 
