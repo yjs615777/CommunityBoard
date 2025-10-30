@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CommunityBoard.Contracts.Requests
-{
+namespace CommunityBoard.Contracts.Requests;
+
     public record CreatePostRequest(
     string Title,
     string Content,
@@ -15,4 +15,4 @@ namespace CommunityBoard.Contracts.Requests
     int CategoryId,
     bool IsPinned
 );
-}
+
