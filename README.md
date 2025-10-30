@@ -55,3 +55,12 @@ ValidationFilter를 통해 전역 검증 에러를 Result<ApiError> 형태로 �
 
 느낀점: 단순 CRUD가 아니라, 응답 포맷, 검증, 매핑, 구조적 일관성을 고려하니 코드가 훨씬 체계적으로 변했다.
 Result<T>와 PagedResult를 직접 리팩터링하면서, 실무 서비스 로직의 확장성 개념을 조금 체감했다.
+
+4일차
+AccountController (MVC)
+Program.cs에 AddAuthentication, AddAuthorization, UseAuthentication, UseAuthorization, IAuthService DI 등록
+AuthService 회원가입 및 로그인 검증 로직 완성
+LoginRequest / RegisterRequest DTO Validation 적용
+AccountController 구현 완료  회원가입(Register),로그인(Login),로그아웃(Logout)
+
+느낀점: 인증(Auth) 로직은 일반적인 CRUD와 달리 Repository 없이 Service만으로 처리하는 구조가 실무 표준임을 이해했다.
