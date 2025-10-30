@@ -18,6 +18,7 @@ namespace CommunityBoard.Data
                 e.Property(x => x.Name).HasMaxLength(50).IsRequired();
                 e.Property(x => x.Email).HasMaxLength(200).IsRequired();
                 e.HasIndex(x => x.Email).IsUnique();
+
             });
 
             // Post
@@ -63,6 +64,7 @@ namespace CommunityBoard.Data
                     .OnDelete(DeleteBehavior.Cascade);
                 e.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
             });
+
         }
     }
 
