@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "CommunityBoard Landing";
+}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/pages/landing.css" />
+</head>
+<body>
+    <div class="landing">
+        <!-- 좌상단 로고 -->
+        <div class="brand">J.S</div>
+
+        <!-- 우상단 내비 -->
+        <nav class="nav">
+            <a asp-controller="Posts" asp-action="Index">공지사항</a>
+            <a asp-controller="Posts" asp-action="Index">자유게시판</a>
+            <a asp-controller="Posts" asp-action="Index">문의게시판</a>
+            <a asp-controller="Account" asp-action="Login">로그인</a>
+        </nav>
+    </div>
+</body>
+</html>
