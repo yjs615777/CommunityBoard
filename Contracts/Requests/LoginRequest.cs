@@ -4,6 +4,6 @@ namespace CommunityBoard.Contracts.Requests;
 
     public record LoginRequest(
         [property: RequiredEmail] string Email,
-        [property: Password] string Password,
-        bool RememberMe = false);
+        [property: Password] string Password
+        );
 
