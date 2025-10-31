@@ -13,5 +13,6 @@ namespace CommunityBoard.Services
         Task<Result<int>> CreateAsync(CreatePostRequest req, CancellationToken ct = default);
         Task<Result> UpdateAsync(int id, UpdatePostRequest req, CancellationToken ct = default);
         Task<Result> DeleteAsync(int id, CancellationToken ct = default);
+        Task<Result> TogglePinAsync(int postId, CancellationToken ct = default);
     }
 }

@@ -104,5 +104,15 @@ namespace CommunityBoard.Services
             return Result.Ok();
         }
 
+        public async Task<Result> TogglePinAsync(int postId, CancellationToken ct = default)
+        {
+            var post = await _posts.GetByIdAsync(postId, ct);
+            if (post is null)
+                return Result.Fail("not_found", "게시글을 찾을 수 없습니다.");
+
+            post.IsPinned = !post.IsPinned;
+            await _posts.UpdateAsync(post, ct);
+            return Result.Ok();
+        }
     }
 }

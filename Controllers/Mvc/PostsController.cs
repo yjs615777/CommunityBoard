@@ -142,6 +142,16 @@ namespace CommunityBoard.Controllers.Mvc
             TempData["Success"] = "게시글이 삭제되었습니다.";
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TogglePin(int id, CancellationToken ct)
+        {
+            var res = await _service.TogglePinAsync(id, ct);
+            if (!res.Success) TempData["Error"] = res.Error?.Message ?? "실패";
+            else TempData["Success"] = "핀 상태가 변경되었습니다.";
+            return RedirectToAction("Detail", new { id });
+        }
     }
 }
 

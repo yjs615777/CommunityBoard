@@ -1,4 +1,5 @@
 ﻿using CommunityBoard.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunityBoard.Data;
@@ -21,6 +22,20 @@ public static class SeedData
                 new Post { Title = "두 번째 글", Content = "EF Core 연결 완료", AuthorId = u2.Id, CategoryId = 1 }
             );
             await db.SaveChangesAsync(ct);
+        }
+        if (!db.Users.Any(u => u.Email == "admin@cb.local"))
+        {
+            var hasher = new PasswordHasher<User>();
+            var admin = new User
+            {
+                Name = "Admin",
+                Email = "admin@cb.local",
+                Role = "Admin", // ← 관리자
+                PasswordHash = "" // 아래에서 해시 설정
+            };
+            admin.PasswordHash = hasher.HashPassword(admin, "Admin!123"); // 샘플 비번
+            db.Users.Add(admin);
+            await db.SaveChangesAsync();
         }
     }
 }
