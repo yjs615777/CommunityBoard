@@ -64,3 +64,11 @@ LoginRequest / RegisterRequest DTO Validation 적용
 AccountController 구현 완료  회원가입(Register),로그인(Login),로그아웃(Logout)
 
 느낀점: 인증(Auth) 로직은 일반적인 CRUD와 달리 Repository 없이 Service만으로 처리하는 구조가 실무 표준임을 이해했다.
+
+5일차
+공통 Layout 시스템 구축
+Landing,login 페이지 구현
+CSS 구조 정리
+
+느낀점: 이번에 Layout과 Landing 페이지를 분리하면서 프론트엔드 구조 설계의 중요성을 실감했다. 처음엔 단순히 “배경만 다르게 하면 되겠지”라고 생각했지만,
+실제로는 Layout, CSS 계층, body 클래스, 정적 파일 로드 순서 등이 서로 맞물려야 화면이 의도한 대로 동작했다.
