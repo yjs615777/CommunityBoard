@@ -4,7 +4,8 @@ using CommunityBoard.Contracts.Requests;
 using CommunityBoard.Contracts.Response;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
+using System.Threading;
 namespace CommunityBoard.Controllers.Api
 {
     [ApiController]
@@ -53,7 +54,12 @@ namespace CommunityBoard.Controllers.Api
         [ProducesResponseType(typeof(Result<object>), 404)]
         public async Task<ActionResult<Result>> Delete(int id, [FromQuery] int authorId, CancellationToken ct)
         {
-            var res = await _service.DeleteAsync(id, authorId, ct);
+            if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var uid))
+                return Forbid();
+
+            var isAdmin = User.IsInRole("Admin");
+
+            var res = await _service.DeleteAsync(id, uid, isAdmin, ct);
             if (!res.Success)
             {
                 return res.Error?.Code switch

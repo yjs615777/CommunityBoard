@@ -42,7 +42,7 @@ namespace CommunityBoard.Data
                 e.Property(x => x.Content).HasColumnType("nvarchar(max)").IsRequired();
                 e.Property(x => x.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 e.HasOne(x => x.Post)
-                    .WithMany()
+                    .WithMany(p => p.Comments)
                     .HasForeignKey(x => x.PostId)
                     .OnDelete(DeleteBehavior.Cascade);
                 e.HasOne(x => x.Author)
