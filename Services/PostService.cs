@@ -19,6 +19,7 @@ namespace CommunityBoard.Services
             var q = _posts.Query()
                   .AsNoTracking()
                   .Include(p => p.Author)
+                  .Include(p => p.Comments)
                   .OrderByDescending(p => p.CreatedAt);
 
             var total = await q.CountAsync(ct);
@@ -32,7 +33,7 @@ namespace CommunityBoard.Services
                                    p.IsPinned,
                                    p.CreatedAt,
                                    p.ViewCount,
-                                   0 // TODO: 댓글 수는 후속 작업에서 채우기
+                                   p.Comments.Count
                                ))
                                .ToListAsync(ct);
 
@@ -43,7 +44,6 @@ namespace CommunityBoard.Services
         public async Task<Result<PostDetailDto>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var p = await _posts.Query()
-              .AsNoTracking()
               .Include(x => x.Author)
               .FirstOrDefaultAsync(x => x.Id == id, ct);
 

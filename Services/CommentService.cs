@@ -24,15 +24,14 @@ namespace CommunityBoard.Services
             return Result<int>.Ok(entity.Id);
         }
 
-        public async Task<Result> DeleteAsync(int id, int authorId, CancellationToken ct = default)
+        public async Task<Result> DeleteAsync(int id, int requesterUserId, bool isAdmin, CancellationToken ct = default)
         {
             var entity = await _comments.GetByIdAsync(id, ct);
             if (entity is null)
                 return Result.Fail("not_found", $"Comment #{id} not found.");
 
-            // 자신의 댓글만 삭제 가능 (인증 붙기 전 임시 규칙)
-            if (entity.AuthorId != authorId)
-                return Result.Fail("forbidden", "본인 댓글만 삭제할 수 있습니다.");
+            if (!isAdmin && entity.AuthorId != requesterUserId)
+                return Result.Fail("forbidden", "삭제 권한이 없습니다.");
 
             await _comments.DeleteAsync(entity, ct);
             return Result.Ok();
