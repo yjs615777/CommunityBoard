@@ -6,7 +6,7 @@ using CommunityBoard.Repositories;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-    
+
 namespace CommunityBoard
 {
     public class Program
@@ -37,7 +37,7 @@ namespace CommunityBoard
             // AuthService를 DI(Container)에 등록
             builder.Services.AddScoped<IAuthService, AuthService>();
 
-            
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o =>
                 {
@@ -52,11 +52,31 @@ namespace CommunityBoard
 
                     // 로그인 세션(쿠키) 유지 시간 설정 (8시간)
                     o.ExpireTimeSpan = TimeSpan.FromHours(8);
+                    o.Events = new CookieAuthenticationEvents
+                    {
+                        OnRedirectToAccessDenied = context =>
+                        {
+                            // API 요청이면 403만 반환 (리디렉션 X)
+                            if (context.Request.Path.StartsWithSegments("/api"))
+                            {
+                                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                                return context.Response.WriteAsync("Access denied.");
+                            }
+
+                            // 일반 MVC 페이지일 경우 alert() 띄우고 뒤로가기
+                            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                            context.Response.ContentType = "text/html; charset=utf-8";
+                            return context.Response.WriteAsync(@"
+                    <script>
+                        alert('권한이 없습니다.');
+                        history.back();
+                    </script>
+                ");
+                        }
+                    };
                 });
             // 권한(Authorization) 정책 시스템 등록
             builder.Services.AddAuthorization();
-            // MVC 컨트롤러 + 뷰 기능 등록 (RazorView 포함)
-            builder.Services.AddControllersWithViews();
 
             // DbContext 등록 (DI)
             builder.Services.AddDbContext<CommunityContext>(options =>
@@ -66,7 +86,7 @@ namespace CommunityBoard
 
             var app = builder.Build();
             // Attribute Routing 기반 API 컨트롤러 활성화
-            app.MapControllers();
+
 
 
 
@@ -78,7 +98,7 @@ namespace CommunityBoard
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommunityBoard API v1");
                 });
             }
-  
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -101,7 +121,7 @@ namespace CommunityBoard
                 await SeedData.InitializeAsync(db);
             }
 
-
+            app.MapControllers();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Landing}/{action=Index}/{id?}");
