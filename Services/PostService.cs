@@ -5,6 +5,7 @@ using CommunityBoard.Contracts.Response;
 using CommunityBoard.Entities;
 using CommunityBoard.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 
 namespace CommunityBoard.Services
@@ -48,16 +49,19 @@ namespace CommunityBoard.Services
 
             if (p is null) return Result<PostDetailDto>.Fail("not_found", $"Post #{id} not found.");
 
+            p.ViewCount++;
+            await _posts.UpdateAsync(p, ct);
+
             var dto = new PostDetailDto(
                 p.Id,
                 p.Title,
                 p.Content,
-                p.CategoryId,      
+                p.CategoryId,
                 p.IsPinned,
                 p.CreatedAt,
                 p.UpdatedAt,
                 p.ViewCount,
-                p.Author.Name,     
+                p.Author.Name,
                 Array.Empty<CommentDto>()
             );
             return Result<PostDetailDto>.Ok(dto);
