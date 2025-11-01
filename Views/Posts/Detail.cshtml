@@ -70,5 +70,20 @@
         {
             <p class="no-comment">아직 댓글이 없습니다.</p>
         }
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="comment-form">
+                <div class="comment-me">@User.Identity!.Name</div>
+
+                <form asp-controller="Comments" asp-action="Create" method="post" class="comment-form-body">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PostId" value="@Model.Id" />
+
+                    <textarea name="Content" class="comment-input" placeholder="댓글을 입력하세요" required></textarea>
+
+                    <button type="submit" class="comment-submit">댓글쓰기</button>
+                </form>
+            </div>
+        }
     </div>
 </section>

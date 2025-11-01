@@ -40,5 +40,14 @@ namespace CommunityBoard.Repositories
 
         public Task SaveAsync(CancellationToken ct = default)
             => _db.SaveChangesAsync(ct);
+
+        public async Task<Post?> GetWithCommentsByIdAsync(int id, CancellationToken ct = default)
+        {
+            return await _db.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Comments).ThenInclude(c => c.Author)
+                .Include(p => p.Comments).ThenInclude(c => c.Likes)
+                .FirstOrDefaultAsync(p => p.Id == id, ct);
+        }
     }
 }

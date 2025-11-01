@@ -14,13 +14,23 @@
                 <a href="/Notice">공지사항</a>
                 <a asp-controller="Posts" asp-action="Index">자유게시판</a>
                 <a href="/Qna">문의게시판</a>
-                <a asp-controller="Account" asp-action="Login">로그인</a>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="logout-btn">로그아웃</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login">로그인</a>
+                }
             </nav>
         </div>
     </header>
 
     <main class="layout-content">
-        @RenderBody()  
+        @RenderBody()
     </main>
 
     @RenderSection("Scripts", required: false)

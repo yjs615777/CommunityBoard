@@ -54,14 +54,28 @@ namespace CommunityBoard.Services
 
         public async Task<Result<PostDetailDto>> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            var p = await _posts.Query()
-              .Include(x => x.Author)
-              .FirstOrDefaultAsync(x => x.Id == id, ct);
+            // 댓글 + 작성자 + 좋아요까지 한 번에 로드 (트래킹 ON: ViewCount 증가를 저장해야 하므로)
+            var p = await _posts.GetWithCommentsByIdAsync(id, ct);
 
-            if (p is null) return Result<PostDetailDto>.Fail("not_found", $"Post #{id} not found.");
+            if (p is null)
+                return Result<PostDetailDto>.Fail("not_found", $"Post #{id} not found.");
 
+            // 조회수 증가 (p는 트래킹 중이므로 SaveAsync만 호출하면 됨)
             p.ViewCount++;
-            await _posts.UpdateAsync(p, ct);
+            await _posts.SaveAsync(ct); // ← UpdateAsync 대신 SaveAsync 사용(더 안전/간단)
+
+            // 댓글 DTO 매핑 (최신 댓글이 위로 오게 정렬)
+            var comments = p.Comments?
+                .OrderByDescending(c => c.CreatedAt)
+                .Select(c => new CommentDto(
+                    c.Id,
+                    c.Author?.Name ?? "Unknown",
+                    c.Content,
+                    c.CreatedAt,
+                    c.Likes?.Count ?? 0,
+                    false // TODO: 로그인 사용자 기준 좋아요 여부 계산 시 true/false로
+                ))
+                .ToList() ?? new List<CommentDto>();
 
             var dto = new PostDetailDto(
                 p.Id,
@@ -72,9 +86,10 @@ namespace CommunityBoard.Services
                 p.CreatedAt,
                 p.UpdatedAt,
                 p.ViewCount,
-                p.Author.Name,
-                Array.Empty<CommentDto>()
+                p.Author?.Name ?? "Unknown",
+                comments
             );
+
             return Result<PostDetailDto>.Ok(dto);
         }
 

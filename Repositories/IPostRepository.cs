@@ -10,5 +10,6 @@ namespace CommunityBoard.Repositories
         Task UpdateAsync(Post entity, CancellationToken ct = default);
         Task DeleteAsync(Post entity, CancellationToken ct = default);
         Task SaveAsync(CancellationToken ct = default);
+        Task<Post?> GetWithCommentsByIdAsync(int id, CancellationToken ct = default);
     }
 }

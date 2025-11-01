@@ -79,3 +79,17 @@ body.default-theme {
     body.default-theme .menu a {
         color: #000;
     }
+/* 로그아웃 링크 */
+ogout-btn {
+    background: none;
+    border: none;
+    color: #000;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.logout-btn:hover {
+    text-decoration: underline;
+}
