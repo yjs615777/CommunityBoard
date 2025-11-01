@@ -6,5 +6,6 @@ namespace CommunityBoard.Contracts.Requests;
 public record RegisterRequest(
     [property: RequiredEmail] string Email,
     [property: PersonName] string Name,
-    [property: Password] string Password
+    [property: Password] string Password,
+    string ConfirmPassword
 );
