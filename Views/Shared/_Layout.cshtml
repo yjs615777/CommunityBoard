@@ -1,31 +1,26 @@
-﻿@{
-    Layout = null;
-    var bodyClass = (string?)ViewData["BodyClass"] ?? "default-page";
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=1440, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - CommunityBoard</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/layout/common.css" />
-
-    @RenderSection("Styles", required: false)   <!--  페이지 전용 CSS 주입 -->
+    <link rel="stylesheet" href="~/css/pages/layout.css" />
 </head>
-<body class="@bodyClass">
+<body class="@ViewData["LayoutTheme"]">
     <header class="layout-header">
-        <div class="brand">J.S</div>
-        <nav class="nav">
-            <a asp-controller="Posts" asp-action="Index">공지사항</a>
-            <a asp-controller="Posts" asp-action="Index">자유게시판</a>
-            <a asp-controller="Posts" asp-action="Index">문의게시판</a>
-            <a asp-controller="Account" asp-action="Login">로그인</a>
-        </nav>
+        <div class="header-inner">
+            <div class="brand">CommunityBoard</div>
+            <nav class="menu">
+                <a href="/">Home</a>
+                <a href="/Notice">공지사항</a>
+                <a href="/Free">자유게시판</a>
+                <a href="/Qna">문의게시판</a>
+                <a href="/Account/Login">로그인</a>
+            </nav>
+        </div>
     </header>
 
-    <main class="layout-body">
+    <main class="layout-content">
         @RenderBody()
     </main>
 </body>
