@@ -1,0 +1,74 @@
+﻿@using CommunityBoard.Contracts.Response
+@model PostDetailDto
+
+@{
+    ViewData["Title"] = Model.Title;
+    var isToday = Model.CreatedAt.ToLocalTime().Date == DateTime.Today;
+    var dateText = isToday ? Model.CreatedAt.ToLocalTime().ToString("HH:mm")
+                           : Model.CreatedAt.ToLocalTime().ToString("M.d");
+}
+
+<link rel="stylesheet" href="~/css/pages/post-detail.css" />
+
+<section class="detail-container">
+
+    <div class="post-header">
+        <h2 class="title">@Model.Title</h2>
+        <div class="meta">
+            <span class="author">@Model.AuthorName</span>
+            <span class="date">@dateText</span>
+            <span class="views">@Model.ViewCount</span>
+        </div>
+    </div>
+
+    <div class="post-content">
+        @Html.Raw(Model.Content)
+    </div>
+
+    <div class="post-actions">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">수정</a>
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn delete">삭제</button>
+            </form>
+        }
+    </div>
+
+    <div class="comment-section">
+        <h3 class="comment-title">댓글</h3>
+
+        @if (Model.Comments is not null && Model.Comments.Count > 0)
+        {
+            @foreach (var c in Model.Comments)
+            {
+                var cIsToday = c.CreatedAt.ToLocalTime().Date == DateTime.Today;
+                var cDate = cIsToday ? c.CreatedAt.ToLocalTime().ToString("HH:mm")
+                : c.CreatedAt.ToLocalTime().ToString("M.d");
+                <div class="comment">
+                    <span class="comment-author">@c.AuthorName</span>
+                    <span class="comment-content">@c.Content</span>
+                    <div class="comment-right">
+                        <span class="comment-date">@cDate</span>
+
+                        <form asp-controller="Comments" asp-action="ToggleLike" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@c.Id" />
+                            <button type="submit" class="like-btn">
+                                <img src="~/images/@(c.LikedByCurrentUser ? "heart.png" : "heart2.png")"
+                                     alt="like" class="heart" />
+                            </button>
+                        </form>
+
+                        <span class="like-count">@c.LikeCount</span>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="no-comment">아직 댓글이 없습니다.</p>
+        }
+    </div>
+</section>

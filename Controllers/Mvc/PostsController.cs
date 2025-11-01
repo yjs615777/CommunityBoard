@@ -25,7 +25,7 @@ namespace CommunityBoard.Controllers.Mvc
             // PageQuery는 Page, PageSize만 받음
             var query = new PageQuery(page, pageSize);
 
-            var res = await _service.GetPagedAsync(query, categoryId: null, ct);
+            var res = await _service.GetPagedAsync(query, categoryId: 1, ct);
             if (!res.Success || res.Data is null)
             {
                 TempData["Error"] = res.Error?.Message ?? "목록을 불러오지 못했습니다.";

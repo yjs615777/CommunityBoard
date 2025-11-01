@@ -23,7 +23,7 @@ namespace CommunityBoard.Controllers.Mvc
             CancellationToken ct = default)
         {
             var query = new PageQuery(page, pageSize);
-            var res = await _service.GetPagedAsync(query, categoryId: 2, ct);
+            var res = await _service.GetPagedAsync(query, categoryId: 2, ct);   
             if (!res.Success || res.Data is null)
             {
                 TempData["Error"] = res.Error?.Message ?? "목록을 불러오지 못했습니다.";

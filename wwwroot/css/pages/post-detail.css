@@ -1,0 +1,106 @@
+﻿.detail-container {
+    width: 832px;
+    margin: 40px auto;
+    font-family: 'Inter', sans-serif;
+    color: #000;
+}
+
+/* 상단 영역 */
+.post-header {
+    border-bottom: 1px solid #000;
+    margin-bottom: 8px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.meta {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    font-size: 16px;
+}
+
+/* 본문 */
+.post-content {
+    background: #E4E4E4;
+    border: 1px solid #000;
+    height: 300px;
+    padding: 16px;
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+/* 버튼 영역 */
+.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.btn {
+    border: 1px solid #000;
+    background: #fff;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* 댓글 영역 */
+.comment-section {
+    margin-top: 20px;
+}
+
+.comment-title {
+    font-size: 20px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 8px;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.5px solid #000;
+    padding: 6px 0;
+    font-size: 16px;
+}
+
+.comment-author {
+    width: 100px;
+    font-weight: 500;
+}
+
+.comment-content {
+    flex-grow: 1;
+}
+
+.comment-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.comment-date {
+    font-size: 10px;
+    color: #555;
+}
+
+.heart {
+    width: 15px;
+    height: 15px;
+}
+
+.like-count {
+    font-size: 14px;
+}
+
+.no-comment {
+    color: #777;
+    font-size: 14px;
+    margin-top: 4px;
+}
