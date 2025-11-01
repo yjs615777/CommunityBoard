@@ -1,1 +1,28 @@
-﻿
+﻿@{
+    ViewData["Title"] = "로그인";
+    ViewData["LayoutTheme"] = "default-theme";   // 검정 글자 + 흰 배경
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/pages/login.css" />
+
+<section class="login-stage">
+    <form class="login-form" method="post" action="/Account/Login">
+        @Html.AntiForgeryToken()
+
+        <div class="form-row">
+            <label for="email">이메일</label>
+            <input id="email" name="Email" type="email" required />
+        </div>
+
+        <div class="form-row">
+            <label for="password">비밀번호</label>
+            <input id="password" name="Password" type="password" required />
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn">로그인</button>
+            <a href="/Account/Register" class="btn">회원가입</a>
+        </div>
+    </form>
+</section>
