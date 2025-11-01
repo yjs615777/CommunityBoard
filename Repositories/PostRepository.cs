@@ -11,8 +11,7 @@ namespace CommunityBoard.Repositories
 
         // 목록/검색용 기본 쿼리: 읽기 최적화(AsNoTracking) + 필수 Include만
         public IQueryable<Post> Query()
-            => _db.Posts.AsNoTracking()
-                        .Include(p => p.Author);
+            => _db.Posts.AsQueryable();
 
         public Task<Post?> GetByIdAsync(int id, CancellationToken ct = default)
             => _db.Posts

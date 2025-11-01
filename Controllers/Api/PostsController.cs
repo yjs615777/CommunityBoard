@@ -19,7 +19,7 @@ public class PostsController(IPostService service, IMapper mapper) : ControllerB
     [ProducesResponseType(typeof(Result<PagedResult<PostListItemDto>>), 200)]
     public async Task<ActionResult<Result<PagedResult<PostListItemDto>>>> GetPaged([FromQuery] PageQuery query, CancellationToken ct)
     {
-        var res = await _service.GetPagedAsync(query, ct);
+        var res = await _service.GetPagedAsync(query,null, ct);
         if (!res.Success) return BadRequest(res);
         return Ok(res);
     }

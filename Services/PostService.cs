@@ -6,6 +6,7 @@ using CommunityBoard.Entities;
 using CommunityBoard.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 
 
 namespace CommunityBoard.Services
@@ -14,14 +15,22 @@ namespace CommunityBoard.Services
     {
         private readonly IPostRepository _posts = posts;
 
-        public async Task<Result<PagedResult<PostListItemDto>>> GetPagedAsync(PageQuery query, CancellationToken ct = default)
+        public async Task<Result<PagedResult<PostListItemDto>>> GetPagedAsync(PageQuery query, int? categoryId = null, CancellationToken ct = default)
         {
-            var q = _posts.Query()
+
+
+            IQueryable<Post> q = _posts.Query()
                   .AsNoTracking()
                   .Include(p => p.Author)
                   .Include(p => p.Comments)
                   .OrderByDescending(p => p.IsPinned)
                   .ThenByDescending(p => p.CreatedAt);
+
+            if (categoryId.HasValue)
+            {
+                var cat = categoryId.Value;        
+                q = q.Where(p => p.CategoryId == cat);
+            }
 
             var total = await q.CountAsync(ct);
 
@@ -34,7 +43,8 @@ namespace CommunityBoard.Services
                                    p.IsPinned,
                                    p.CreatedAt,
                                    p.ViewCount,
-                                   p.Comments.Count
+                                   p.Comments.Count,
+                                   p.CategoryId
                                ))
                                .ToListAsync(ct);
 

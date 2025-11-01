@@ -9,7 +9,10 @@ namespace CommunityBoard.Contracts.Response
     bool IsPinned,
     DateTime CreatedAt,
     int ViewCount,
-    int CommentCount
+    int CommentCount,
+    int CategoryId
+
+
 );
 
     public record PostDetailDto(
