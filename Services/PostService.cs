@@ -20,7 +20,8 @@ namespace CommunityBoard.Services
                   .AsNoTracking()
                   .Include(p => p.Author)
                   .Include(p => p.Comments)
-                  .OrderByDescending(p => p.CreatedAt);
+                  .OrderByDescending(p => p.IsPinned)
+                  .ThenByDescending(p => p.CreatedAt);
 
             var total = await q.CountAsync(ct);
 
