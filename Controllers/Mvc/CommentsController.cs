@@ -1,4 +1,5 @@
 ﻿using CommunityBoard.Contracts.Requests;
+using CommunityBoard.Entities;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace CommunityBoard.Controllers.Mvc
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [Route("[controller]/[action]")]
-    public class CommentsController(ICommentService service, ILogger<CommentsController> logger) : Controller
+    public class CommentsController(ICommentService service,ILikeService likeService, ILogger<CommentsController> logger) : Controller
     {
+
         private readonly ICommentService _service = service;
         private readonly ILogger<CommentsController> _logger = logger;
+        private readonly ILikeService _likes = likeService;
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,5 +54,23 @@ namespace CommunityBoard.Controllers.Mvc
 
             return RedirectToAction("Detail", "Posts", new { id = postId });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleLikeAjax(int id, CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim is null) return Forbid();
+
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+                return BadRequest(new { error = "Invalid user id" });
+
+            var res = await _likes.ToggleAsync(id, userId, ct);
+            if (!res.Success)
+                return BadRequest(new { error = res.Error?.Message ?? "toggle failed" });
+
+            return Json(new { count = res.Data.count, liked = res.Data.liked });
+        }
+
     }
 }

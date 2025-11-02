@@ -31,5 +31,7 @@ namespace CommunityBoard.Repositories
             _db.Likes.Remove(entity);
             await _db.SaveChangesAsync(ct);
         }
+        public Task<int> CountByCommentIdAsync(int commentId, CancellationToken ct = default)
+    => _db.Likes.CountAsync(l => l.CommentId == commentId, ct);
     }
 }

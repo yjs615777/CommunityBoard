@@ -52,7 +52,7 @@ namespace CommunityBoard.Services
                 new PagedResult<PostListItemDto>(items, total, query.Page, query.PageSize));
         }
 
-        public async Task<Result<PostDetailDto>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<Result<PostDetailDto>> GetByIdAsync(int id, int? currentUserId = null, CancellationToken ct = default)
         {
             // 댓글 + 작성자 + 좋아요까지 한 번에 로드 (트래킹 ON: ViewCount 증가를 저장해야 하므로)
             var p = await _posts.GetWithCommentsByIdAsync(id, ct);
@@ -73,7 +73,7 @@ namespace CommunityBoard.Services
                     c.Content,
                     c.CreatedAt,
                     c.Likes?.Count ?? 0,
-                    false // TODO: 로그인 사용자 기준 좋아요 여부 계산 시 true/false로
+                    currentUserId.HasValue && c.Likes != null && c.Likes.Any(l => l.UserId == currentUserId.Value)
                 ))
                 .ToList() ?? new List<CommentDto>();
 
@@ -129,7 +129,7 @@ namespace CommunityBoard.Services
             var post = await _posts.GetByIdAsync(id, ct);
             if (post is null)
                 return Result.Fail("not_found", $"Post #{id} not found.");
-
+                    
             await _posts.DeleteAsync(post, ct);
             return Result.Ok();
         }

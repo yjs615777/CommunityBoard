@@ -28,5 +28,28 @@ namespace CommunityBoard.Services
             await _likes.RemoveAsync(like, ct);
             return Result.Ok();
         }
+        public async Task<Result<(int count, bool liked)>> ToggleAsync(int commentId, int userId, CancellationToken ct = default)
+        {
+            // 토글 전 상태
+            var existed = await _likes.ExistsAsync(commentId, userId, ct);
+
+            // 토글
+            if (existed)
+            {
+                var like = await _likes.FindAsync(commentId, userId, ct);
+                if (like is not null)
+                    await _likes.RemoveAsync(like, ct);
+            }
+            else
+            {
+                await _likes.AddAsync(new Like { CommentId = commentId, UserId = userId }, ct);
+            }
+
+            // 토글 "후" 최신 상태 재조회
+            var likedNow = await _likes.ExistsAsync(commentId, userId, ct);
+            var count = await _likes.CountByCommentIdAsync(commentId, ct);
+
+            return Result<(int, bool)>.Ok((count, likedNow));
+        }
     }
 }

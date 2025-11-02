@@ -4,6 +4,7 @@ using CommunityBoard.Contracts.Response;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CommunityBoard.Controllers.Mvc
 {
@@ -45,7 +46,15 @@ namespace CommunityBoard.Controllers.Mvc
         [AllowAnonymous]
         public async Task<IActionResult> Detail(int id, CancellationToken ct)
         {
-            var res = await _service.GetByIdAsync(id, ct);
+            int? currentUserId = null;
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (claim != null && int.TryParse(claim.Value, out var uid))
+                    currentUserId = uid;
+            }
+
+            var res = await _service.GetByIdAsync(id, currentUserId, ct);
             if (!res.Success || res.Data is null)
             {
                 TempData["Error"] = res.Error?.Message ?? "게시글을 찾을 수 없습니다.";
@@ -85,7 +94,7 @@ namespace CommunityBoard.Controllers.Mvc
         [HttpGet("Posts/Edit/{id:int}")]
         public async Task<IActionResult> Edit(int id, CancellationToken ct)
         {
-            var res = await _service.GetByIdAsync(id, ct);
+            var res = await _service.GetByIdAsync(id, null, ct);
             if (!res.Success || res.Data is null)
             {
                 TempData["Error"] = res.Error?.Message ?? "게시글을 찾을 수 없습니다.";

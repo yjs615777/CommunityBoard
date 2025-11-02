@@ -30,7 +30,7 @@ public class PostsController(IPostService service, IMapper mapper) : ControllerB
     [ProducesResponseType(typeof(Result<object>), 404)]
     public async Task<ActionResult<Result<PostDetailDto>>> GetById(int id, CancellationToken ct)
     {
-        var res = await _service.GetByIdAsync(id, ct);
+        var res = await _service.GetByIdAsync(id,null, ct);
         if (!res.Success) return NotFound(res);
         return Ok(res);
     }

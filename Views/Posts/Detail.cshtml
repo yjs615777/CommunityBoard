@@ -1,101 +1,148 @@
-﻿@using CommunityBoard.Contracts.Response
-@model PostDetailDto
+﻿    @using CommunityBoard.Contracts.Response
+    @model PostDetailDto
 
-@{
-    ViewData["Title"] = Model.Title;
-    var isToday = Model.CreatedAt.ToLocalTime().Date == DateTime.Today;
-    var dateText = isToday ? Model.CreatedAt.ToLocalTime().ToString("HH:mm")
-                           : Model.CreatedAt.ToLocalTime().ToString("M.d");
-}
+    @{
+        ViewData["Title"] = Model.Title;
+        var isToday = Model.CreatedAt.ToLocalTime().Date == DateTime.Today;
+        var dateText = isToday ? Model.CreatedAt.ToLocalTime().ToString("HH:mm")
+                               : Model.CreatedAt.ToLocalTime().ToString("M.d");
+    }
 
-<link rel="stylesheet" href="~/css/pages/post-detail.css" />
+    <link rel="stylesheet" href="~/css/pages/post-detail.css" />
 
-<section class="detail-container">
+    <section class="detail-container">
 
-    <div class="post-header">
-        <h2 class="title">@Model.Title</h2>
-        <div class="meta">
-            <span class="author">@Model.AuthorName</span>
-            <span class="date">@dateText</span>
-            <span class="views">@Model.ViewCount</span>
+        <div class="post-header">
+            <h2 class="title">@Model.Title</h2>
+            <div class="meta">
+                <span class="author">@Model.AuthorName</span>
+                <span class="date">@dateText</span>
+                <span class="views">@Model.ViewCount</span>
+            </div>
         </div>
-    </div>
 
-    <div class="post-content">
-        @Html.Raw(Model.Content)
-    </div>
+        <div class="post-content">
+            @Html.Raw(Model.Content)
+        </div>
 
-    <div class="post-actions">
-        @if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">수정</a>
-            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="inline">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn delete">삭제</button>
-            </form>
-        }
-    </div>
-
-    <div class="comment-section">
-        <h3 class="comment-title">댓글</h3>
-
-        @if (Model.Comments is not null && Model.Comments.Count > 0)
-        {
-            @foreach (var c in Model.Comments)
+        <div class="post-actions">
+            @if (User.Identity?.IsAuthenticated ?? false)
             {
-                var cIsToday = c.CreatedAt.ToLocalTime().Date == DateTime.Today;
-                var cDate = cIsToday ? c.CreatedAt.ToLocalTime().ToString("HH:mm")
-                : c.CreatedAt.ToLocalTime().ToString("M.d");
-                <div class="comment">
-                    <span class="comment-author">@c.AuthorName</span>
-                    <span class="comment-content">@c.Content</span>
-                    <div class="comment-right">
-                        <span class="comment-date">@cDate</span>
+                <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">수정</a>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn delete">삭제</button>
+                </form>
+            }
+        </div>
 
-                        <form asp-controller="Comments" asp-action="ToggleLike" method="post" class="inline">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@c.Id" />
-                            <button type="submit" class="like-btn">
-                                <img src="~/images/@(c.LikedByCurrentUser ? "heart.png" : "heart2.png")"
-                                     alt="like" class="heart" />
-                            </button>
-                        </form>
+        <div class="comment-section">
+            <h3 class="comment-title">댓글</h3>
 
-                        <span class="like-count">@c.LikeCount</span>
-                        @if (User.Identity?.IsAuthenticated ?? false)
-                        {
-                            if (User.Identity!.Name == c.AuthorName)
+            @if (Model.Comments is not null && Model.Comments.Count > 0)
+            {
+                @foreach (var c in Model.Comments)
+                {
+                    var cIsToday = c.CreatedAt.ToLocalTime().Date == DateTime.Today;
+                    var cDate = cIsToday ? c.CreatedAt.ToLocalTime().ToString("HH:mm")
+                    : c.CreatedAt.ToLocalTime().ToString("M.d");
+                    <div class="comment">
+                        <span class="comment-author">@c.AuthorName</span>
+                        <span class="comment-content">@c.Content</span>
+                        <div class="comment-right">
+                            <span class="comment-date">@cDate</span>
+
+                        <form asp-controller="Comments" asp-action="ToggleLikeAjax" method="post" class="inline js-like-form" data-comment-id="@c.Id">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@c.Id" />
+                                <button type="submit" class="like-btn">
+                                    <img src="~/images/@(c.LikedByCurrentUser ? "heart2.png" : "heart.png")"
+                                         alt="like" class="heart" />
+                                </button>
+                            </form>
+
+
+
+                        <span id="like-count-@c.Id" class="like-count">@c.LikeCount</span>
+                            @if (User.Identity?.IsAuthenticated ?? false)
                             {
-                                <form asp-controller="Comments" asp-action="Delete" method="post" class="inline comment-delete-form">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@c.Id" />
-                                    <input type="hidden" name="postId" value="@Model.Id" />
-                                    <button type="submit" class="comment-delete-btn" title="삭제" aria-label="삭제"></button>
-                                </form>
+                                if (User.Identity!.Name == c.AuthorName)
+                                {
+                                    <form asp-controller="Comments" asp-action="Delete" method="post" class="inline comment-delete-form">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@c.Id" />
+                                        <input type="hidden" name="postId" value="@Model.Id" />
+                                        <button type="submit" class="comment-delete-btn" title="삭제" aria-label="삭제"></button>
+                                    </form>
+                                }
                             }
-                        }
+                        </div>
                     </div>
+                }
+            }
+            else
+            {
+                <p class="no-comment">아직 댓글이 없습니다.</p>
+            }
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <div class="comment-form">
+                    <div class="comment-me">@User.Identity!.Name</div>
+
+                    <form asp-controller="Comments" asp-action="Create" method="post" class="comment-form-body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="PostId" value="@Model.Id" />
+
+                        <textarea name="Content" class="comment-input" placeholder="댓글을 입력하세요" required></textarea>
+
+                        <button type="submit" class="comment-submit">댓글쓰기</button>
+                    </form>
                 </div>
             }
-        }
-        else
-        {
-            <p class="no-comment">아직 댓글이 없습니다.</p>
-        }
-        @if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <div class="comment-form">
-                <div class="comment-me">@User.Identity!.Name</div>
+        </div>
+    </section>
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              // 모든 좋아요 폼 가로채기
+              document.querySelectorAll('.js-like-form').forEach(function (form) {
+                form.addEventListener('submit', async function (e) {
+                  e.preventDefault();
 
-                <form asp-controller="Comments" asp-action="Create" method="post" class="comment-form-body">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="PostId" value="@Model.Id" />
+                  // Anti-forgery 토큰 추출
+                  const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+                  const token = tokenInput ? tokenInput.value : '';
 
-                    <textarea name="Content" class="comment-input" placeholder="댓글을 입력하세요" required></textarea>
+                  const formData = new FormData(form);
+                  try {
+                    const resp = await fetch(form.action, {
+                      method: 'POST',
+                      headers: { 'RequestVerificationToken': token },
+                      body: new URLSearchParams(formData)
+                    });
 
-                    <button type="submit" class="comment-submit">댓글쓰기</button>
-                </form>
-            </div>
-        }
-    </div>
-</section>
+                    if (!resp.ok) {
+                      console.error('toggle failed', await resp.text());
+                      return;
+                    }
+
+                    const json = await resp.json(); // { count, liked }
+
+                    // 카운트 업데이트
+                    const cmtId = form.dataset.commentId;
+                    const countEl = document.getElementById('like-count-' + cmtId);
+                    if (countEl) countEl.textContent = json.count;
+
+                    // 하트 이미지 교체
+                    const img = form.querySelector('img.heart');
+                    if (img) {
+                      img.src = json.liked ? '/images/heart2.png' : '/images/heart.png';
+                    }
+                  } catch (err) {
+                    console.error(err);
+                  }
+                });
+              });
+            });
+        </script>
+    }
