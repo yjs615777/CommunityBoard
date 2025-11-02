@@ -35,5 +35,21 @@ namespace CommunityBoard.Controllers.Mvc
 
             return RedirectToAction("Detail", "Posts", new { id = req.PostId });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id, int postId, CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) return Forbid();
+
+            int requesterId = int.Parse(userIdClaim.Value);
+            bool isAdmin = User.IsInRole("Admin");
+
+            var res = await _service.DeleteAsync(id, requesterId, isAdmin, ct);
+            if (!res.Success)
+                TempData["Error"] = res.Error?.Message ?? "댓글 삭제 실패";
+
+            return RedirectToAction("Detail", "Posts", new { id = postId });
+        }
     }
 }

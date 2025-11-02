@@ -42,7 +42,7 @@ namespace CommunityBoard.Controllers.Mvc
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
-        {
+        {   
             // 기본값: 공지 카테고리 + 고정글
             return View(new CreatePostRequest("", "", NoticeCategoryId, 0));
         }

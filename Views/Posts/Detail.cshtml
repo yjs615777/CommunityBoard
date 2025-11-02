@@ -62,6 +62,18 @@
                         </form>
 
                         <span class="like-count">@c.LikeCount</span>
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            if (User.Identity!.Name == c.AuthorName)
+                            {
+                                <form asp-controller="Comments" asp-action="Delete" method="post" class="inline comment-delete-form">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@c.Id" />
+                                    <input type="hidden" name="postId" value="@Model.Id" />
+                                    <button type="submit" class="comment-delete-btn" title="삭제" aria-label="삭제"></button>
+                                </form>
+                            }
+                        }
                     </div>
                 </div>
             }
