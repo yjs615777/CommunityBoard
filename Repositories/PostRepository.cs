@@ -47,6 +47,7 @@ namespace CommunityBoard.Repositories
                 .Include(p => p.Author)
                 .Include(p => p.Comments).ThenInclude(c => c.Author)
                 .Include(p => p.Comments).ThenInclude(c => c.Likes)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(p => p.Id == id, ct);
         }
     }

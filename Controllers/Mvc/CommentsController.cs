@@ -8,6 +8,7 @@ namespace CommunityBoard.Controllers.Mvc
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
+    [Route("[controller]/[action]")]
     public class CommentsController(ICommentService service, ILogger<CommentsController> logger) : Controller
     {
         private readonly ICommentService _service = service;
@@ -15,7 +16,7 @@ namespace CommunityBoard.Controllers.Mvc
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] CreateCommentRequest req, CancellationToken ct)
+        public async Task<IActionResult> Create( CreateCommentRequest req, CancellationToken ct)
         {
             // 로그인 사용자 ID 가져오기 (AuthorId)
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);

@@ -19,6 +19,23 @@ namespace CommunityBoard.Data
                 e.Property(x => x.Email).HasMaxLength(200).IsRequired();
                 e.HasIndex(x => x.Email).IsUnique();
 
+                // User → Post 관계 (유저 삭제 시 글은 남기기)
+                e.HasMany(u => u.Posts)
+                    .WithOne(p => p.Author)
+                    .HasForeignKey(p => p.AuthorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // User → Comment 관계 (유저 삭제 시 댓글은 남기기)
+                e.HasMany(u => u.Comments)
+                    .WithOne(c => c.Author)
+                    .HasForeignKey(c => c.AuthorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // User → Like 관계 (유저 삭제 시 좋아요 삭제)
+                e.HasMany(u => u.Likes)
+                    .WithOne(l => l.User)
+                    .HasForeignKey(l => l.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Post
@@ -30,10 +47,10 @@ namespace CommunityBoard.Data
                 e.Property(x => x.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
                 e.Property(x => x.ViewCount).HasDefaultValue(0);
 
-                e.HasOne(x => x.Author)
-                    .WithMany(u => u.Posts)
-                    .HasForeignKey(x => x.AuthorId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                e.HasMany(p => p.Comments)
+                    .WithOne(c => c.Post)
+                    .HasForeignKey(c => c.PostId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Comment
@@ -41,27 +58,18 @@ namespace CommunityBoard.Data
             {
                 e.Property(x => x.Content).HasColumnType("nvarchar(max)").IsRequired();
                 e.Property(x => x.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
-                e.HasOne(x => x.Post)
-                    .WithMany(p => p.Comments)
-                    .HasForeignKey(x => x.PostId)
+
+                // Comment → Like (댓글 삭제 시 좋아요 삭제)
+                e.HasMany(c => c.Likes)
+                    .WithOne(l => l.Comment)
+                    .HasForeignKey(l => l.CommentId)
                     .OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Author)
-                    .WithMany(u => u.Comments)
-                    .HasForeignKey(x => x.AuthorId)
-                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Like
             m.Entity<Like>(e =>
             {
-                e.HasOne(x => x.Comment)
-                    .WithMany(c => c.Likes)
-                    .HasForeignKey(x => x.CommentId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.User)
-                    .WithMany(u => u.Likes)
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                // 하나의 댓글에 한 유저가 중복으로 좋아요 누르지 못하게 제약 설정
                 e.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
             });
 
