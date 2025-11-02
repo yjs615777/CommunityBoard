@@ -63,27 +63,34 @@
 
 .comment {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px; /* ← 간격은 gap으로 */
     border-bottom: 0.5px solid #000;
     padding: 6px 0;
     font-size: 16px;
 }
 
 .comment-author {
-    width: 100px;
+    flex: 0 0 100px; /* ← 고정폭 */
+    white-space: nowrap; /* ← 줄바꿈 금지 */
+    overflow: hidden; /* 넘치면 … */
+    text-overflow: ellipsis; /* ← … 처리 */
     font-weight: 500;
 }
 
 .comment-content {
-    flex-grow: 1;
+    flex: 1 1 auto; /* ← 남는 공간 전부 */
+    word-break: break-word; /* 긴 단어만 줄바꿈 */
 }
 
 .comment-right {
+    flex: 0 0 auto; /* ← 우측 메타는 내용만큼 */
     display: flex;
     align-items: center;
     gap: 4px;
+    white-space: nowrap; /* 시간/좋아요 줄바꿈 금지 */
 }
+
 
 .comment-date {
     font-size: 10px;
@@ -107,47 +114,48 @@
 
 /* 댓글 쓰기 폼 */
 .comment-form {
-  margin-top: 12px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+    margin-top: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
 }
 
 /* 왼쪽에 표시되는 현재 로그인 사용자 이름 */
 .comment-me {
-  width: 100px;
-  font-size: 16px;
-  line-height: 29px;
-  color: #000;
+    width: 100px;
+    font-size: 16px;
+    line-height: 29px;
+    color: #000;
 }
 
 /* 폼 본문: 입력창 + 버튼 */
 .comment-form-body {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex: 1;
 }
 
 /* 입력창: 680 x 132, 흰배경, 검은 테두리 */
 .comment-input {
-  box-sizing: border-box;
-  width: 680px;
-  height: 132px;
-  background: #FFFFFF;
-  border: 1px solid #000000;
-  padding: 10px;
-  resize: vertical; /* 필요없으면 none */
-  font-size: 16px;
-  line-height: 1.5;
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 132px;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    padding: 10px;
+    resize: none;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 /* 버튼: 98 x 44, 회색 배경, 0.5px 테두리 */
 .comment-submit {
-  box-sizing: border-box;
-  width: 98px;
-  height: 44px;
-  background: #DEDEDE;
-  border: 0.5px solid #000000;
-  cursor: pointer;
-  font-size: 16px;
+    box-sizing: border-box;
+    width: 98px;
+    height: 44px;
+    background: #DEDEDE;
+    border: 0.5px solid #000000;
+    cursor: pointer;
+    font-size: 16px;
 }
