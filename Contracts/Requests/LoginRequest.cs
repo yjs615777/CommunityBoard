@@ -2,8 +2,14 @@
 
 namespace CommunityBoard.Contracts.Requests;
 
-    public record LoginRequest(
-        [property: RequiredEmail] string Email,
-        [property: Password] string Password
-        );
+public class LoginRequest
+{
+    [RequiredEmail]
+    public string Email { get; set; } = null!;
+
+    [Password]
+    public string Password { get; set; } = null!;
+
+    public bool RememberMe { get; set; } = false;
+}
 

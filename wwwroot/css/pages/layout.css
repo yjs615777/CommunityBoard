@@ -79,17 +79,38 @@ body.default-theme {
     body.default-theme .menu a {
         color: #000;
     }
-/* 로그아웃 링크 */
-ogout-btn {
-    background: none;
-    border: none;
-    color: #000;
-    font: inherit;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 32px;  /* 간격은 gap으로 관리 */
 }
 
-.logout-btn:hover {
+/* form이 줄바꿈 만들지 않도록 */
+.inline { display: inline; }
+
+/* 로그아웃 버튼을 링크처럼 보이게 “강하게” 리셋 */
+.menu .logout-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    font: inherit;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: opacity 0.3s, text-decoration-color 0.2s;
+}
+
+.menu .logout-btn:hover {
+    opacity: 0.7;
     text-decoration: underline;
 }
+
+/* 테마 색상에 로그아웃 버튼 포함 */
+body.landing-theme .menu .logout-btn { color: #fff; }
+body.default-theme  .menu .logout-btn { color: #000; }
