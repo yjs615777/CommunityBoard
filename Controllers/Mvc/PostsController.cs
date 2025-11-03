@@ -14,6 +14,11 @@ namespace CommunityBoard.Controllers.Mvc
     {
         private readonly IPostService _service = service;
         private readonly ILogger<PostsController> _logger = logger;
+        private bool IsOwnerOrAdmin(string authorName)
+        {
+            return User.IsInRole("Admin") ||
+                   string.Equals(User.Identity?.Name, authorName, StringComparison.OrdinalIgnoreCase);
+        }
 
         // GET: /Posts
         [HttpGet]
@@ -112,6 +117,9 @@ namespace CommunityBoard.Controllers.Mvc
                 return RedirectToAction(nameof(Index));
             }
 
+            if (!IsOwnerOrAdmin(res.Data.AuthorName))
+                return Forbid();
+
             var p = res.Data;
             var vm = new UpdatePostRequest(
                 Title: p.Title,
@@ -129,6 +137,17 @@ namespace CommunityBoard.Controllers.Mvc
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [FromForm] UpdatePostRequest req, CancellationToken ct)
         {
+            var resGet = await _service.GetByIdAsync(id, null, ct);
+            if (!resGet.Success || resGet.Data is null)
+            {
+                TempData["Error"] = "게시글을 찾을 수 없습니다.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // 작성자 또는 관리자만 수정 가능
+            if (!IsOwnerOrAdmin(resGet.Data.AuthorName))
+                return Forbid();
+
             if (!ModelState.IsValid)
             {
                 ViewData["PostId"] = id;
@@ -152,6 +171,17 @@ namespace CommunityBoard.Controllers.Mvc
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, CancellationToken ct)
         {
+            var resGet = await _service.GetByIdAsync(id, null, ct);
+            if (!resGet.Success || resGet.Data is null)
+            {
+                TempData["Error"] = "게시글을 찾을 수 없습니다.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // 작성자 또는 관리자만 삭제 가능
+            if (!IsOwnerOrAdmin(resGet.Data.AuthorName))
+                return Forbid();
+
             var res = await _service.DeleteAsync(id, ct);
             if (!res.Success)
             {

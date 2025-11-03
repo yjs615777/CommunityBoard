@@ -2,7 +2,7 @@
 
 <section class="create-page">
     <!-- 🚨 완전 명시적으로 고정 -->
-    <form action="/Posts/Create" method="post">
+    <form method="post" action="@Url.Action("Create", ViewContext.RouteData.Values["controller"]!.ToString())">
         @Html.AntiForgeryToken()
 
         <input type="hidden" asp-for="CategoryId" />
