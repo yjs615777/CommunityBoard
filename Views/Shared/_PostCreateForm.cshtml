@@ -1,0 +1,18 @@
+﻿@model CommunityBoard.Contracts.Requests.CreatePostRequest
+
+<section class="create-page">
+    <!-- 🚨 완전 명시적으로 고정 -->
+    <form action="/Posts/Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="CategoryId" />
+
+        <label asp-for="Title" class="create-title-label">제목</label>
+        <input asp-for="Title" class="create-title-input" placeholder="제목을 입력하세요" />
+
+        <label asp-for="Content" class="create-content-label">내용</label>
+        <textarea asp-for="Content" class="create-content-input" placeholder="내용을 입력하세요"></textarea>
+
+        <button type="submit" class="create-submit">글쓰기</button>
+    </form>
+</section>

@@ -4,6 +4,7 @@ using CommunityBoard.Contracts.Response;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CommunityBoard.Controllers.Mvc
 {
@@ -53,8 +54,17 @@ namespace CommunityBoard.Controllers.Mvc
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] CreatePostRequest req, CancellationToken ct)
         {
-            // 서버에서 강제 보정: 공지 카테고리 + 무조건 고정글
-            req = req with { CategoryId = NoticeCategoryId };
+            // 로그인한 관리자 ID 추출
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim is null || !int.TryParse(claim.Value, out var uid))
+            {
+                ModelState.AddModelError(string.Empty, "로그인 정보가 유효하지 않습니다.");
+                return View(req);
+            }
+
+            // 서버에서 최종 강제: 공지 카테고리 + 작성자
+            req = req with { CategoryId = NoticeCategoryId, AuthorId = uid };
+
 
             if (!ModelState.IsValid)
                 return View(req);

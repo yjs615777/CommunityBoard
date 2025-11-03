@@ -1,0 +1,75 @@
+﻿/* Create Page Layout */
+.create-page {
+    position: relative;
+    width: 1440px;
+    height: 1024px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    color: #000;
+}
+
+/* 제목 라벨 */
+.create-title-label {
+    position: absolute;
+    left: 380px; /* 좌측 여백 */
+    top: 180px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* 제목 입력창 (Rectangle 4) */
+.create-title-input {
+    position: absolute;
+    left: 380px;
+    top: 215px;
+    width: 680px;
+    height: 42px;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    padding: 8px 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* 내용 라벨 */
+.create-content-label {
+    position: absolute;
+    left: 380px;
+    top: 285px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* 내용 입력창 (Rectangle 5) */
+.create-content-input {
+    position: absolute;
+    left: 380px;
+    top: 320px;
+    width: 680px;
+    height: 447px;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: none;
+    box-sizing: border-box;
+}
+
+/* 글쓰기 버튼 */
+.create-submit {
+    position: absolute;
+    right: 380px;
+    bottom: 150px;
+    width: 80px;
+    height: 35px;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+    .create-submit:hover {
+        background: #f1f1f1;
+    }

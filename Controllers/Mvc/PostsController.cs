@@ -68,7 +68,8 @@ namespace CommunityBoard.Controllers.Mvc
         [HttpGet]
         public IActionResult Create()
         {
-            return View(); // 모델: CreatePostRequest
+            var model = new CreatePostRequest("", "", 1, 0);    
+            return View(model); // 모델: CreatePostRequest
         }
 
         // POST: /Posts/Create
@@ -76,6 +77,16 @@ namespace CommunityBoard.Controllers.Mvc
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] CreatePostRequest req, CancellationToken ct)
         {
+            // 로그인 사용자 ID 추출
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim is null || !int.TryParse(claim.Value, out var uid))
+            {
+                ModelState.AddModelError(string.Empty, "로그인 정보가 유효하지 않습니다.");
+                return View(req);
+            }
+
+            // 서버에서 최종 보정 (이 컨트롤러는 '자유게시판'이므로 1 고정)
+            req = req with { AuthorId = uid, CategoryId = 1 };
             if (!ModelState.IsValid)
                 return View(req);
 
@@ -87,7 +98,7 @@ namespace CommunityBoard.Controllers.Mvc
             }
 
             TempData["Success"] = "게시글이 등록되었습니다.";
-            return RedirectToAction(nameof(Detail), new { id = res.Data });
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: /Posts/Edit/5

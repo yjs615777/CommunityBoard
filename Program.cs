@@ -121,10 +121,11 @@ namespace CommunityBoard
                 await SeedData.InitializeAsync(db);
             }
 
-            app.MapControllers();
+            
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Landing}/{action=Index}/{id?}");
+            app.MapControllers();
 
             app.Run();
         }

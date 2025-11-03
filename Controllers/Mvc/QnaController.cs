@@ -4,6 +4,7 @@ using CommunityBoard.Contracts.Response;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CommunityBoard.Controllers.Mvc
 {
@@ -36,15 +37,25 @@ namespace CommunityBoard.Controllers.Mvc
 
         // GET: /Qna/Create
         [HttpGet]
-        public IActionResult Create() => View(new CreatePostRequest("", "", 2, 0));
+        public IActionResult Create()
+        {
+            var model = new CreatePostRequest("", "", 2, 0);
+            return View(model);
+        }
 
         // POST: /Qna/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] CreatePostRequest req, CancellationToken ct)
         {
-            // 서버에서 한 번 더 보정/검증: 문의게시판은 무조건 2
-            req = req with { CategoryId = 2 };
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim is null || !int.TryParse(claim.Value, out var uid))
+            {
+                ModelState.AddModelError(string.Empty, "로그인 정보가 유효하지 않습니다.");
+                return View(req);
+            }
+
+            req = req with { CategoryId = 2, AuthorId = uid };
 
             if (!ModelState.IsValid) return View(req);
 
