@@ -12,12 +12,17 @@ namespace CommunityBoard.Controllers.Mvc
     [Authorize]
     public class QnaController(IPostService service, ILogger<QnaController> logger) : Controller
     {
+
         private readonly IPostService _service = service;
         private readonly ILogger<QnaController> _logger = logger;
+
+
+
 
         // GET: /Qna
         [HttpGet]
         [AllowAnonymous]
+
         public async Task<IActionResult> Index(
             int page = 1,
             int pageSize = 10,
@@ -68,5 +73,16 @@ namespace CommunityBoard.Controllers.Mvc
             TempData["Success"] = "문의글이 등록되었습니다.";
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TogglePin(int id, CancellationToken ct)
+        {
+            var res = await _service.TogglePinAsync(id, ct);
+            TempData[res.Success ? "Success" : "Error"] =
+                res.Success ? "핀 상태가 변경되었습니다." : (res.Error?.Message ?? "실패");
+            return RedirectToAction("Detail", new { id });
+        }
+
     }
 }

@@ -224,3 +224,14 @@
     background: none; /* 혹시 모를 상속 제거 */
     border: none;
 }
+.btn.pin {
+    background-color: #007bff;
+    color: #fff;
+    margin-left: 8px;
+}
+
+.btn.unpin {
+    background-color: #6c757d;
+    color: #fff;
+    margin-left: 8px;
+}

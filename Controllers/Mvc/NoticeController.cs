@@ -43,7 +43,7 @@ namespace CommunityBoard.Controllers.Mvc
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
-        {   
+        {
             // 기본값: 공지 카테고리 + 고정글
             return View(new CreatePostRequest("", "", NoticeCategoryId, 0));
         }
@@ -80,6 +80,16 @@ namespace CommunityBoard.Controllers.Mvc
             // 더 깔끔하게 하려면 PostService.CreateAsync 내에서 IsPinned = true로 저장하도록 확장해도 됨.
             TempData["Success"] = "공지사항이 등록되었습니다.";
             return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TogglePin(int id, CancellationToken ct)
+        {
+            var res = await _service.TogglePinAsync(id, ct);
+            TempData[res.Success ? "Success" : "Error"] =
+                res.Success ? "핀 상태가 변경되었습니다." : (res.Error?.Message ?? "실패");
+            return RedirectToAction("Detail", new { id });
         }
     }
 }

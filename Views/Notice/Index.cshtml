@@ -3,7 +3,7 @@
 @model PagedResult<PostListItemDto>
 
 @{
-    ViewData["Title"] = "문의게시판";
+    ViewData["Title"] = "공지사항";
     ViewData["LayoutTheme"] = "default-theme";
     Layout = "_Layout";
 
@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="~/css/pages/posts-index.css" />
 
 <section class="board-stage">
-    <h1 class="board-title">문의게시판</h1>
+    <h1 class="board-title">공지사항</h1>
 
     <div class="table-wrap">
         <table class="board-table">
@@ -44,10 +44,15 @@
                     string dateText = (local.Date == DateTime.Today)
                     ? local.ToString("HH\\:mm")
                     : local.ToString("M\\.d");
-
-                    <tr>
+                    var rowClass = p.IsPinned ? "row pinned" : "row";
+                    <tr class="@rowClass">
                         <td class="cell-no">@((startNumber - i) > 0 ? (startNumber - i) : 0)</td>
                         <td class="cell-title">
+                            @if (p.IsPinned)                            // ✅ 추가
+                            {
+                                <span class="badge-pin">고정</span>
+                            }
+                            
                             <a href="/Posts/Detail/@p.Id" class="link">@p.Title</a>
                         </td>
                         <td>@p.AuthorName</td>
@@ -62,7 +67,7 @@
     <nav class="pagination">
         @if (page > 1)
         {
-            <a class="page" href="/Qna?page=@(page - 1)&pageSize=@size">이전</a>
+            <a class="page" href="/Notice?page=@(page - 1)&pageSize=@size">이전</a>
         }
 
         @{
@@ -72,13 +77,14 @@
 
             if (from > 1)
             {
-                <a class="page" href="/Qna?page=1&pageSize=@size">1</a>
+                <a class="page" href="/Notice?page=1&pageSize=@size">1</a>
                 if (from > 2)
                 {
 
                     <span class="dots">…</span>
                 }
             }
+
             for (int i = from; i <= to; i++)
             {
                 if (i == page)
@@ -89,9 +95,10 @@
                 else
                 {
 
-                    <a class="page" href="/Qna?page=@i&pageSize=@size">@i</a>
+                    <a class="page" href="/Notice?page=@i&pageSize=@size">@i</a>
                 }
             }
+
             if (to < totalPages)
             {
                 if (to < totalPages - 1)
@@ -99,13 +106,14 @@
 
                     <span class="dots">…</span>
                 }
-                <a class="page" href="/Qna?page=@totalPages&pageSize=@size">@totalPages</a>
+                <a class="page" href="/Notice?page=@totalPages&pageSize=@size">@totalPages</a>
             }
         }
 
-        @if (User.Identity?.IsAuthenticated ?? false)
+        @* 작성 버튼은 관리자만 노출 *@
+        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
         {
-            <a class="btn write" href="/Qna/Create">글쓰기</a>
+            <a class="btn write" href="/Notice/Create">글쓰기</a>
         }
     </nav>
 </section>

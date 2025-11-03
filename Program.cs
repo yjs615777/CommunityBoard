@@ -15,14 +15,21 @@ namespace CommunityBoard
         {
 
             var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddControllers(options =>
-            {
-                options.Filters.Add<ValidationFilter>(); // ← 전역 필터 등록
-            });
-
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services
+            .AddControllersWithViews(options =>
+            {
+                //  1) 로그인 우회 필터 먼저
+                options.Filters.Add<LoginValidationBypassFilter>();
+
+                //  2) 전역 ValidationFilter 나중
+                options.Filters.Add<ValidationFilter>();
+            })
+         .ConfigureApiBehaviorOptions(opt =>
+          {
+              // [ApiController] 자동 400 끄기
+              opt.SuppressModelStateInvalidFilter = true;
+          });
             // Swagger(OpenAPI) 관련 서비스 등록
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -121,7 +128,7 @@ namespace CommunityBoard
                 await SeedData.InitializeAsync(db);
             }
 
-            
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Landing}/{action=Index}/{id?}");

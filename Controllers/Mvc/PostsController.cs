@@ -168,7 +168,7 @@ namespace CommunityBoard.Controllers.Mvc
         }
 
         // POST: /Posts/Delete/5
-        [HttpPost("Delete/{id:int}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, CancellationToken ct)
         {
@@ -191,8 +191,7 @@ namespace CommunityBoard.Controllers.Mvc
             }
 
             TempData["Success"] = "게시글이 삭제되었습니다.";
-            var currentController = ControllerContext.RouteData.Values["controller"]?.ToString();
-            return RedirectToAction("Index", currentController);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

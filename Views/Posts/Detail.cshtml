@@ -2,6 +2,7 @@
 @model PostDetailDto
 
 @{
+    var ctrl = ViewContext.RouteData.Values["controller"]!.ToString();
     ViewData["Title"] = Model.Title;
     var isToday = Model.CreatedAt.ToLocalTime().Date == DateTime.Today;
     var dateText = isToday ? Model.CreatedAt.ToLocalTime().ToString("HH:mm")
@@ -29,14 +30,19 @@
         @if (User.Identity?.IsAuthenticated == true
                 && (User.IsInRole("Admin") || User.Identity!.Name == Model.AuthorName))
         {
-            <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">수정</a>
+            <!-- 수정: 현재 컨트롤러 기준으로 이동 -->
+            <a class="btn edit" href="@Url.Action("Edit", ctrl, new { id = Model.Id })">수정</a>
 
-
-            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="inline">
+            <!-- 삭제: 현재 컨트롤러 기준으로 POST -->
+            <form method="post"
+                  action="@Url.Action("Delete", ctrl, new { id = Model.Id })"
+                  class="inline"
+                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn delete">삭제</button>
             </form>
         }
+      
     </div>
 
     <div class="comment-section">

@@ -28,9 +28,11 @@ namespace CommunityBoard.Services
 
             if (categoryId.HasValue)
             {
-                var cat = categoryId.Value;        
+                var cat = categoryId.Value;
                 q = q.Where(p => p.CategoryId == cat);
             }
+            q = q.OrderByDescending(p => p.IsPinned)
+                 .ThenByDescending(p => p.CreatedAt);
 
             var total = await q.CountAsync(ct);
 
@@ -129,7 +131,7 @@ namespace CommunityBoard.Services
             var post = await _posts.GetByIdAsync(id, ct);
             if (post is null)
                 return Result.Fail("not_found", $"Post #{id} not found.");
-                    
+
             await _posts.DeleteAsync(post, ct);
             return Result.Ok();
         }

@@ -16,7 +16,8 @@
                 <a href="/Qna">문의게시판</a>
                 @if (User.Identity?.IsAuthenticated ?? false)
                 {
-                    <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="inline"
+                          onsubmit="return confirm('정말 로그아웃 하시겠습니까?');">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="logout-btn">로그아웃</button>
                     </form>
