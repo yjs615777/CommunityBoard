@@ -10,7 +10,7 @@ namespace CommunityBoard.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PostsController(IPostService service, IMapper mapper) : ControllerBase
+public class PostsApiController(IPostService service, IMapper mapper) : ControllerBase
 {
     private readonly IPostService _service = service;
     private readonly IMapper _mapper = mapper;

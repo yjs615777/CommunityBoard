@@ -29,9 +29,10 @@
         @if (User.Identity?.IsAuthenticated == true
                 && (User.IsInRole("Admin") || User.Identity!.Name == Model.AuthorName))
         {
-            <a class="btn edit" href="/Posts/Edit/@Model.Id">수정</a>
+            <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">수정</a>
 
-            <form action="/Posts/Delete/@Model.Id" method="post" class="inline">
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="inline">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn delete">삭제</button>
             </form>

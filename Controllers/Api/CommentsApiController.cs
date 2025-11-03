@@ -10,7 +10,7 @@ namespace CommunityBoard.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CommentsController(ICommentService service , IMapper mapper) : ControllerBase
+    public class CommentsApiController(ICommentService service , IMapper mapper) : ControllerBase
     {
         private readonly ICommentService _service = service;
         private readonly IMapper _mapper = mapper;

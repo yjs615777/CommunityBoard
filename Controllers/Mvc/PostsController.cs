@@ -4,6 +4,7 @@ using CommunityBoard.Contracts.Response;
 using CommunityBoard.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace CommunityBoard.Controllers.Mvc
@@ -167,7 +168,7 @@ namespace CommunityBoard.Controllers.Mvc
         }
 
         // POST: /Posts/Delete/5
-        [HttpPost("Posts/Delete/{id:int}")]
+        [HttpPost("Delete/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, CancellationToken ct)
         {
@@ -190,8 +191,10 @@ namespace CommunityBoard.Controllers.Mvc
             }
 
             TempData["Success"] = "게시글이 삭제되었습니다.";
-            return RedirectToAction(nameof(Index));
+            var currentController = ControllerContext.RouteData.Values["controller"]?.ToString();
+            return RedirectToAction("Index", currentController);
         }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
