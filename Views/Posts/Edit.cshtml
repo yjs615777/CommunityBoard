@@ -1,0 +1,32 @@
+﻿@using CommunityBoard.Contracts.Requests
+@model UpdatePostRequest
+
+@{
+    ViewData["Title"] = "게시글 수정";
+    var postId = (int)ViewData["PostId"]; // 컨트롤러에서 넣어준 값
+}
+
+<link rel="stylesheet" href="~/css/pages/post-create.css" />
+
+<section class="create-page">
+    <form action="/Posts/Edit/@postId" method="post">
+        @Html.AntiForgeryToken()
+
+        <!-- 카테고리/핀 값 유지 (자유게시판이면 CategoryId=1 그대로) -->
+        <input type="hidden" asp-for="CategoryId" />
+        <input type="hidden" asp-for="IsPinned" />
+
+        @* (선택) 검증 메시지 *@
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+        <label asp-for="Title" class="create-title-label">제목</label>
+        <input asp-for="Title" class="create-title-input" />
+        <span asp-validation-for="Title" class="field-error"></span>
+
+        <label asp-for="Content" class="create-content-label">내용</label>
+        <textarea asp-for="Content" class="create-content-input"></textarea>
+        <span asp-validation-for="Content" class="field-error"></span>
+
+        <button type="submit" class="create-submit">수정</button>
+    </form>
+</section>
