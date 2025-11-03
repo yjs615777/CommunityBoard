@@ -19,11 +19,8 @@ namespace CommunityBoard
             builder.Services
             .AddControllersWithViews(options =>
             {
-                //  1) 로그인 우회 필터 먼저
-                options.Filters.Add<LoginValidationBypassFilter>();
-
-                //  2) 전역 ValidationFilter 나중
-                options.Filters.Add<ValidationFilter>();
+                
+                options.Filters.Add<ApiValidationFilter>();
             })
          .ConfigureApiBehaviorOptions(opt =>
           {
