@@ -1,145 +1,181 @@
-﻿/* 프레임: 1440 x 1024 기준 */
-.board-stage {
-    width: 1440px;
+﻿.board-stage {
+    /* Frame */
+    --page-w: 1440px;
+    --pad-x: 36px;
+    --pad-top: 48px;
+    --pad-bottom: 24px;
+    /* Typography */
+    --ff: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', Arial, sans-serif;
+    --title-fs: 48px; /* 시안값 */
+    --title-lh: 58px;
+    --th-fs: 32px; /* 헤더 폰트 */
+    --th-lh: 39px;
+    --td-fs: 20px;
+    --td-lh: 29px;
+    /* Table & columns */
+    --col-no: 90px;
+    --col-author: 200px;
+    --col-date: 160px;
+    --col-views: 120px;
+    /* Colors & borders */
+    --c-text: #000;
+    --c-muted: #555;
+    --c-bg: #fff;
+    --c-line: #000;
+    --c-line-light: #e9e9e9;
+    --c-pin: #cfcfcf;
+    width: var(--page-w);
     min-height: calc(100vh - 80px);
     margin: 0 auto;
-    padding: 48px 36px 24px;
+    padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
     box-sizing: border-box;
-    background: #fff;
-    color: #000;
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', Arial, sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--ff);
 }
 
-/* 타이틀 */
-.board-title {
-    margin: 0 0 24px 0;
-    font-weight: 700;
-    font-size: 48px; /* 시안값 */
-    line-height: 58px;
-}
-
-/* 테이블 래퍼 */
-.table-wrap {
-    border-top: 1px solid transparent;
-}
-
-/* 표 */
-.board-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-    /* 헤더 */
-    .board-table thead th {
-        text-align: left;
-        padding: 12px 10px;
+    /* 타이틀 */
+    .board-stage .board-title {
+        margin: 0 0 24px 0;
         font-weight: 700;
-        font-size: 32px; /* 시안 헤더 폰트 */
-        line-height: 39px;
-        border-bottom: 1px solid #000; /* 짙은 라인 */
+        font-size: var(--title-fs);
+        line-height: var(--title-lh);
     }
 
-/* 컬럼 너비 (시안 느낌에 맞춤) */
-.col-no {
-    width: 90px;
-}
-
-.col-title {
-    width: auto;
-}
-
-.col-author {
-    width: 200px;
-}
-
-.col-date {
-    width: 160px;
-}
-
-.col-views {
-    width: 120px;
-}
-
-/* 바디 */
-.board-table tbody td {
-    padding: 14px 10px;
-    font-size: 20px; /* 본문은 24 -> 웹 가독성 감안 소폭 조절 */
-    line-height: 29px;
-    border-bottom: 1px solid #e9e9e9; /* 연한 라인 */
-    vertical-align: middle;
-}
-
-.board-table .num {
-    text-align: right;
-}
-
-/* 고정 행(회색) */
-.board-table .row.pinned td {
-    background: #CFCFCF; /* 시안의 회색 */
-}
-
-/* 링크 기본값 제거 */
-a.link {
-    color: inherit;
-    text-decoration: none;
-}
-
-    a.link:hover {
-        text-decoration: underline;
+    /* 테이블 래퍼 */
+    .board-stage .table-wrap {
+        border-top: 1px solid transparent;
     }
 
-/* 고정 배지(선택) */
-.badge-pin {
-    display: inline-block;
-    font-size: 12px;
-    border: 1px solid #000;
-    padding: 2px 6px;
-    margin-right: 8px;
-    line-height: 1;
-}
-
-/* 페이지네이션 */
-.pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 18px;
-    position: relative;
-}
-
-    .pagination .btn.write {
-        position: absolute;
-        right: 0; /* 시안처럼 우하단 글쓰기 */
+    /* 표 */
+    .board-stage .board-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
     }
 
-.page {
-    display: inline-block;
-    padding: 6px 10px;
-    border: 1px solid #ddd;
-    color: #000;
-    text-decoration: none;
-    font-size: 16px;
-}
+        /* 헤더 */
+        .board-stage .board-table thead th {
+            text-align: left;
+            padding: 12px 10px;
+            font-weight: 700;
+            font-size: var(--th-fs);
+            line-height: var(--th-lh);
+            border-bottom: 1px solid var(--c-line);
+        }
 
-    .page.current {
-        background: #eee;
-        border-color: #000;
+    /* 컬럼 너비 */
+    .board-stage .col-no {
+        width: var(--col-no);
     }
 
-.dots {
-    padding: 0 6px;
-    color: #555;
-}
+    .board-stage .col-title {
+        width: auto;
+    }
 
-/* 버튼 공통 */
-.btn {
-    display: inline-block;
-    padding: 8px 14px;
-    border: 1px solid #000;
-    background: #e9e9e9;
-    color: #000;
-    text-decoration: none;
-    font-weight: 600;
-}
+    .board-stage .col-author {
+        width: var(--col-author);
+    }
+
+    .board-stage .col-date {
+        width: var(--col-date);
+    }
+
+    .board-stage .col-views {
+        width: var(--col-views);
+    }
+
+    /* 바디 */
+    .board-stage .board-table tbody td {
+        padding: 14px 10px;
+        font-size: var(--td-fs);
+        line-height: var(--td-lh);
+        border-bottom: 1px solid var(--c-line-light);
+        vertical-align: middle;
+    }
+
+    .board-stage .board-table .num {
+        text-align: right;
+    }
+
+    /* 고정 행(회색) – tr 또는 .row 둘 다 대응 */
+    .board-stage .board-table tbody tr.pinned td,
+    .board-stage .board-table tbody .row.pinned td {
+        background: var(--c-pin);
+    }
+
+    /* 링크(범위 제한) */
+    .board-stage a.link {
+        color: inherit;
+        text-decoration: none;
+    }
+
+        .board-stage a.link:hover {
+            text-decoration: underline;
+        }
+
+    /* 고정 배지 */
+    .board-stage .badge-pin {
+        display: inline-block;
+        font-size: 12px;
+        border: 1px solid var(--c-line);
+        padding: 2px 6px;
+        margin-right: 8px;
+        line-height: 1;
+    }
+
+    /* 페이지네이션 */
+    .board-stage .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 18px;
+        position: relative;
+    }
+
+        .board-stage .pagination .btn.write {
+            position: absolute;
+            right: 0; /* 우하단 글쓰기 */
+        }
+
+    /* 페이지 번호 */
+    .board-stage .page {
+        display: inline-block;
+        padding: 6px 10px;
+        border: 1px solid #ddd;
+        color: var(--c-text);
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+        .board-stage .page.current {
+            background: #eee;
+            border-color: var(--c-line);
+        }
+
+    .board-stage .dots {
+        padding: 0 6px;
+        color: var(--c-muted);
+    }
+
+    /* 버튼 공통(범위 제한) */
+    .board-stage .btn {
+        display: inline-block;
+        padding: 8px 14px;
+        border: 1px solid var(--c-line);
+        background: #e9e9e9;
+        color: var(--c-text);
+        text-decoration: none;
+        font-weight: 600;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+        /* 접근성: 키보드 포커스 가시화 */
+        .board-stage .page:focus-visible,
+        .board-stage .btn:focus-visible,
+        .board-stage a.link:focus-visible {
+            outline: 2px solid var(--c-line);
+            outline-offset: 2px;
+        }

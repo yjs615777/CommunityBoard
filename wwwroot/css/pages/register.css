@@ -1,92 +1,93 @@
-﻿/* 화면 중앙 배치: 헤더 80px 제외 */
-.register-stage {
+﻿.register-stage {
     min-height: calc(100vh - 80px);
     display: flex;
-    justify-content: center; /* 수평 중앙 */
-    align-items: center; /* 수직 중앙 */
+    justify-content: center;
+    align-items: center;
 }
 
-/* 폼 래퍼: 중앙에 두되, 내부 블록은 위에서 아래로 */
+/* 폼 래퍼 */
 .register-form {
-    width: 640px; /* 작업 여유폭 */
+    /* 공통 폭 변수 (입력/버튼 동일 폭) */
+    --field-w: 369px;
+    width: 640px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     row-gap: 28px;
-    align-items: center; /* 폼 자체는 가운데 */
-}
-
-/* 각 줄: 라벨은 왼쪽, 인풋 폭은 369로 고정 */
-.form-row {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* 라벨을 입력창의 왼쪽에 붙임 */
-    row-gap: 8px;
-    width: 369px; /* 인풋 폭과 동일 */
-    margin: 0 auto; /* 폼을 가운데 유지 */
-}
-
-/* 라벨: 36px Bold (스펙) */
-.register-form label {
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', Arial, sans-serif;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 44px;
     color: #000;
 }
 
-/* 인풋: 369 x 32 (스펙) */
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="password"] {
-    box-sizing: border-box;
-    width: 369px;
-    height: 32px;
-    border: 1px solid #000;
-    background: #fff;
-    padding: 0 8px;
-    font-size: 18px;
-}
+    /* 각 입력 줄 */
+    .register-form .form-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: var(--field-w);
+        margin: 0 auto;
+        row-gap: 8px;
+    }
 
-/* 버튼 영역: 입력 폭 기준 오른쪽 정렬 (스샷처럼) */
-.actions {
-    width: 369px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 8px;
-}
+    /* 라벨 */
+    .register-form label {
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 44px;
+    }
 
-/* 버튼 통일 스타일 */
-.btn {
-    -webkit-appearance: none;
-    appearance: none;
-    display: inline-block;
-    height: 36px;
-    line-height: 36px;
-    padding: 0 16px;
-    border: 1px solid #000;
-    background: #e9e9e9;
-    font-weight: 600;
-    font-size: 16px;
-    color: #000;
-    cursor: pointer;
-    text-decoration: none;
-}
+    /* 인풋 */
+    .register-form input[type="text"],
+    .register-form input[type="email"],
+    .register-form input[type="password"] {
+        box-sizing: border-box;
+        width: var(--field-w);
+        height: 32px;
+        padding: 0 8px;
+        border: 1px solid #000;
+        background: #fff;
+        font-size: 18px;
+    }
 
-/* 검증 메시지 */
-.validation-summary {
-    width: 369px;
-    color: #b00020;
-    font-size: 14px;
-}
+    /* 버튼 영역 */
+    .register-form .actions {
+        width: var(--field-w);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 8px;
+    }
 
-.field-error {
-    color: #b00020;
-    font-size: 13px;
-}
+    /* 버튼 */
+    .register-form .btn {
+        -webkit-appearance: none;
+        appearance: none;
+        display: inline-block;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 16px;
+        border: 1px solid #000;
+        background: #e9e9e9;
+        font-weight: 600;
+        font-size: 16px;
+        color: #000;
+        cursor: pointer;
+        text-decoration: none;
+    }
 
-/* 링크 기본값 제거(혹시 전역에 없다면) */
-a {
-    color: inherit;
-    text-decoration: none;
-}
+    /* 검증 메시지 */
+    .register-form .validation-summary {
+        width: var(--field-w);
+        color: #b00020;
+        font-size: 14px;
+    }
+
+    .register-form .field-error {
+        color: #b00020;
+        font-size: 13px;
+    }
+
+    /* 폼 내 링크 */
+    .register-form a {
+        color: inherit;
+        text-decoration: none;
+    }

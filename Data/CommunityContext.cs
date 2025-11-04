@@ -42,7 +42,6 @@ namespace CommunityBoard.Data
             m.Entity<Post>(e =>
             {
                 e.Property(x => x.Title).HasMaxLength(200).IsRequired();
-                e.Property(x => x.Content).HasColumnType("nvarchar(max)").IsRequired();
                 e.Property(x => x.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 e.Property(x => x.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
                 e.Property(x => x.ViewCount).HasDefaultValue(0);
@@ -56,7 +55,6 @@ namespace CommunityBoard.Data
             // Comment
             m.Entity<Comment>(e =>
             {
-                e.Property(x => x.Content).HasColumnType("nvarchar(max)").IsRequired();
                 e.Property(x => x.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
 
                 // Comment → Like (댓글 삭제 시 좋아요 삭제)
