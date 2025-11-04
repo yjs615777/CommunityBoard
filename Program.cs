@@ -121,9 +121,14 @@ namespace CommunityBoard
 
             using (var scope = app.Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<CommunityContext>();
-                db.Database.Migrate();
-                await SeedData.InitializeAsync(db);
+                var sp = scope.ServiceProvider;
+
+                // logger 준비
+                var logger = sp.GetRequiredService<ILoggerFactory>()
+                               .CreateLogger("Seed");
+
+                // SeedData 내부에서 RUN_MIGRATIONS/SEED_DEMO 환경변수로 제어
+                await SeedData.InitializeAsync(app.Services, logger);
             }
 
 
