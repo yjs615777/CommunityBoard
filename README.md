@@ -122,3 +122,13 @@ GoDaddy 도메인 구매 완료
 
 느낀점: Docker volume 으로 로그인 세션을 유지하는 방법을 실제 배포 환경에서 경험함,EC2 중지 전 종료 절차 (down → stop docker) 를 이해하고 안전한 운영 루틴 확립,
 Caddy의 장점(자동 HTTPS, 간단한 설정)을 직접 확인하고 실무 표준 배포 구조를 경험했다
+
+11일차
+GoDaddy 도메인 연결 DNA 관리 A 레코드: @ → 52.79.155.189 (EC2 Elastic IP) , CNAME: www → communityboard.space. , 불필요한 _domainconnect CNAME 및 SOA 충돌 항목 삭제
+EC2 인스턴스 환경 점검,보안 그룹(launch-wizard-1) 인바운드 규칙 수정
+Docker 환경 구성조정
+RDS 연동, 1433 포트 허용 + 보안 그룹 연결
+Caddy Reverse Proxy + HTTPS 설정
+Let’s Encrypt SSL 자동 발급, docker logs -f caddy 로 인증 절차 확인
+
+느낀점: Caddy의 SSL 발급 과정이 정말 어려웠다 DNS, 포트, 권한 등 얽혀있는게 많아서 정말 오류투성이였다 꼬인 실을 한땀한땀 풀어가는 느낌이였지만 결국 하면된다
