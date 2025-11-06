@@ -112,3 +112,13 @@ docker-compose.yml 생성 (환경변수 연결, 포트 8080 매핑)
 
 느낀점: EC2 SSH 연결과 Docker 환경 구성이 생각보다 명확했고 리눅스 CLI 명령 흐름이 이제 익숙해지고 있다고 느껴졌다
 
+10일차
+Docker 컨테이너 정상 실행 확인
+DataProtection 키 영속화 설정
+RDS (SQL Server Express) 연결 완료
+Caddy Reverse Proxy 설정
+GoDaddy 도메인 구매 완료
+인스턴스 관리 절차 정리
+
+느낀점: Docker volume 으로 로그인 세션을 유지하는 방법을 실제 배포 환경에서 경험함,EC2 중지 전 종료 절차 (down → stop docker) 를 이해하고 안전한 운영 루틴 확립,
+Caddy의 장점(자동 HTTPS, 간단한 설정)을 직접 확인하고 실무 표준 배포 구조를 경험했다
