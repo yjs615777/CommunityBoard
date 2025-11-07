@@ -45,7 +45,7 @@
     /* 버튼 공통 */
     .detail-container .btn {
         border: 1px solid #000;
-        background: #fff;
+        background: #e9e9e9;
         padding: 4px 10px;
         cursor: pointer;
         font-size: 14px;
@@ -56,13 +56,13 @@
         /* 핀 버튼 변형 */
         .detail-container .btn.pin {
             background-color: #007bff;
-            color: #fff;
+            color: #e9e9e9;
             margin-left: 8px;
         }
 
         .detail-container .btn.unpin {
             background-color: #6c757d;
-            color: #fff;
+            color: #e9e9e9;
             margin-left: 8px;
         }
 
@@ -188,7 +188,7 @@
     .detail-container .comment-submit {
         width: 98px;
         height: 44px;
-        background: #dedede;
+        background: #e9e9e9;
         border: 0.5px solid #000;
         cursor: pointer;
         font-size: 16px;
