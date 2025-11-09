@@ -1,9 +1,9 @@
-## CommunityBoard
+### CommunityBoard
 사내 커뮤니티 게시판 프로젝트
 ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이션
 사용자 회원가입 / 로그인 / 게시글 / 댓글 / 좋아요(중복방지) 기능을 구현한 연습 프로젝트 입니다.
 
-## 프로젝트 개요
+### 프로젝트 개요
 
 - CommunityBoard는 회사 내부에서 사용할 수 있는
 간단한 커뮤니티(게시판) 형태의 웹 애플리케이션입니다.
@@ -15,7 +15,7 @@ ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이
 같은 사용자는 한 댓글에 한 번만 좋아요를 누를 수 있습니다 (중복방지 로직 포함).
 - 관리자(Admin) — Role 기반 권한(Role: User / Admin) 구조로 관리 기능 확장 가능.
 
-## 개발일지
+### 개발일지
 
 1일차
 프로젝트 생성 CommunityBoard
@@ -132,3 +132,6 @@ Caddy Reverse Proxy + HTTPS 설정
 Let’s Encrypt SSL 자동 발급, docker logs -f caddy 로 인증 절차 확인
 
 느낀점: Caddy의 SSL 발급 과정이 정말 어려웠다 DNS, 포트, 권한 등 얽혀있는게 많아서 정말 오류투성이였다 꼬인 실을 한땀한땀 풀어가는 느낌이였지만 결국 하면된다
+
+## 프로젝트 회고 & 피드백 
+
