@@ -1,9 +1,9 @@
-### CommunityBoard
+## CommunityBoard
 사내 커뮤니티 게시판 프로젝트
 ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이션
 사용자 회원가입 / 로그인 / 게시글 / 댓글 / 좋아요(중복방지) 기능을 구현한 연습 프로젝트 입니다.
 
-### 프로젝트 개요
+## 프로젝트 개요
 
 - CommunityBoard는 회사 내부에서 사용할 수 있는
 간단한 커뮤니티(게시판) 형태의 웹 애플리케이션입니다.
@@ -15,7 +15,7 @@ ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이
 같은 사용자는 한 댓글에 한 번만 좋아요를 누를 수 있습니다 (중복방지 로직 포함).
 - 관리자(Admin) — Role 기반 권한(Role: User / Admin) 구조로 관리 기능 확장 가능.
 
-### 개발일지
+## 개발일지
 
 1일차
 프로젝트 생성 CommunityBoard
@@ -134,4 +134,18 @@ Let’s Encrypt SSL 자동 발급, docker logs -f caddy 로 인증 절차 확인
 느낀점: Caddy의 SSL 발급 과정이 정말 어려웠다 DNS, 포트, 권한 등 얽혀있는게 많아서 정말 오류투성이였다 꼬인 실을 한땀한땀 풀어가는 느낌이였지만 결국 하면된다
 
 ## 프로젝트 회고 & 피드백 
+- 잘된 점
+프로젝트 전반 구조(Entities → Repositories → Services → Controllers)가 깔끔하게 분리되어 유지보수가 쉬웠음
+Swagger, GlobalExceptionMiddleware, ValidationFilter 등 실무 패턴을 직접 구현해보며 구조 이해도 향상
+AWS EC2 + Docker + Caddy + GoDaddy로 실제 배포까지 완주하면서 DevOps 흐름 전반을 경험
+
+- 아쉬운점 / 보완할 부분
+Validation 시스템 혼용:
+DataAnnotations(Attribute)와 FluentValidation을 동시에 사용해 ModelState 중복 오류 발생시킬 수 있다
+Attribute와 Validator는 둘중하나만 쓰는게 권장된다는걸 배웠다
+DTO 설계 혼동 (Request vs Response) :
+클라이언트에서 서버로 실제 입력하는 값은 Request
+서버에서 클라이언트로 값을 가져오는 것은 Response로 실제 구현하다보니 DTO를 분리하여 관리하는 이유를 정확하게 이해했다
+API의 입출력 명세가 명확해지고, 보안상 숨겨야 할 데이터(PasswordHash 등) 가 Response에 포함되는 실수를 방지할 수 있으며,
+Controller나 Service에서 단방향(입력은 Request DTO로만 받고, 출력은 Response/Result로만 내보내는 단방향) 데이터 흐름을 더 안전하게 유지할 수 있다.
 
