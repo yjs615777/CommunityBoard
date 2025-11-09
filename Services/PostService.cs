@@ -15,50 +15,50 @@ namespace CommunityBoard.Services
     {
         private readonly IPostRepository _posts = posts;
 
-        public async Task<Result<PagedResult<PostListItemDto>>> GetPagedAsync(PageQuery query, int? categoryId = null, CancellationToken ct = default)
-        {
-
-
-            IQueryable<Post> q = _posts.Query()
-                  .AsNoTracking()
-                  .Include(p => p.Author)
-                  .Include(p => p.Comments)
-                  .OrderByDescending(p => p.IsPinned)
-                  .ThenByDescending(p => p.CreatedAt);
-
-            if (categoryId.HasValue)
+            public async Task<Result<PagedResult<PostListItemDto>>> GetPagedAsync(PageQuery query, int? categoryId = null, CancellationToken ct = default)
             {
-                var cat = categoryId.Value;
-                q = q.Where(p => p.CategoryId == cat);
+
+
+                IQueryable<Post> q = _posts.Query()
+                      .AsNoTracking()
+                      .Include(p => p.Author)
+                      .Include(p => p.Comments)
+                      .OrderByDescending(p => p.IsPinned)
+                      .ThenByDescending(p => p.CreatedAt);
+
+                if (categoryId.HasValue)
+                {
+                    var cat = categoryId.Value;
+                    q = q.Where(p => p.CategoryId == cat);
+                }
+                q = q.OrderByDescending(p => p.IsPinned)
+                     .ThenByDescending(p => p.CreatedAt);
+
+                var total = await q.CountAsync(ct);
+
+                var items = await q.Skip(query.Skip)
+                                   .Take(query.PageSize)
+                                   .Select(p => new PostListItemDto(
+                                       p.Id,
+                                       p.Title,
+                                       p.Author.Name,
+                                       p.IsPinned,
+                                       p.CreatedAt,
+                                       p.ViewCount,
+                                       p.Comments.Count,
+                                       p.CategoryId
+                                   ))
+                                   .ToListAsync(ct);
+
+                return Result<PagedResult<PostListItemDto>>.Ok(
+                    new PagedResult<PostListItemDto>(items, total, query.Page, query.PageSize));
             }
-            q = q.OrderByDescending(p => p.IsPinned)
-                 .ThenByDescending(p => p.CreatedAt);
-
-            var total = await q.CountAsync(ct);
-
-            var items = await q.Skip(query.Skip)
-                               .Take(query.PageSize)
-                               .Select(p => new PostListItemDto(
-                                   p.Id,
-                                   p.Title,
-                                   p.Author.Name,
-                                   p.IsPinned,
-                                   p.CreatedAt,
-                                   p.ViewCount,
-                                   p.Comments.Count,
-                                   p.CategoryId
-                               ))
-                               .ToListAsync(ct);
-
-            return Result<PagedResult<PostListItemDto>>.Ok(
-                new PagedResult<PostListItemDto>(items, total, query.Page, query.PageSize));
-        }
 
         public async Task<Result<PostDetailDto>> GetByIdAsync(int id, int? currentUserId = null, CancellationToken ct = default)
         {
             // 댓글 + 작성자 + 좋아요까지 한 번에 로드 (트래킹 ON: ViewCount 증가를 저장해야 하므로)
             var p = await _posts.GetWithCommentsByIdAsync(id, ct);
-
+            
             if (p is null)
                 return Result<PostDetailDto>.Fail("not_found", $"Post #{id} not found.");
 

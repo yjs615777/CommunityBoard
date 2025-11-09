@@ -16,7 +16,7 @@ namespace CommunityBoard.Filters
             {
                 // ValidationFilter가 이 요청을 건드리지 않도록 신호
                 context.HttpContext.Items["SkipValidationFilter"] = true;
-
+                
                 // 모델 상태도 비워서 길이제한 등으로 막히지 않게
                 context.ModelState.Clear();
             }

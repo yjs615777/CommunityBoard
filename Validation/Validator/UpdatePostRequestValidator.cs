@@ -1,7 +1,7 @@
 ﻿using CommunityBoard.Contracts.Requests;
 using FluentValidation;
 
-namespace CommunityBoard.Validation
+namespace CommunityBoard.Validation.Validator
 {
     public class UpdatePostRequestValidator : AbstractValidator<UpdatePostRequest>
     {

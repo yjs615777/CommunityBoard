@@ -22,8 +22,7 @@ public static class SeedData
             await db.Database.MigrateAsync(ct);
         }
 
-        // 2) 관리자 계정: 환경변수로 주입 (필수)
-        //    예: Admin 이메일=ADMIN_EMAIL, 비번=ADMIN_PASSWORD
+        // 환경 변수에서 관리자 이메일과 비밀번호를 읽어서 계정을 생성
         var adminEmail = cfg["ADMIN_EMAIL"];      
         var adminPass = cfg["ADMIN_PASSWORD"];   
         if (!string.IsNullOrWhiteSpace(adminEmail) && !string.IsNullOrWhiteSpace(adminPass))

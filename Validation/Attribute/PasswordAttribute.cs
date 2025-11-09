@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CommunityBoard.Validation
+namespace CommunityBoard.Validation.Attribute
 {
     public sealed class PasswordAttribute : StringLengthAttribute
     {

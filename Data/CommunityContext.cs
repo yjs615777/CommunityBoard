@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityBoard.Data
 
 {
-    public class CommunityContext(DbContextOptions<CommunityContext> options) : DbContext(options)
-    {
-        public DbSet<User> Users => Set<User>();
-        public DbSet<Post> Posts => Set<Post>();
-        public DbSet<Comment> Comments => Set<Comment>();
-        public DbSet<Like> Likes => Set<Like>();
+        public class CommunityContext(DbContextOptions<CommunityContext> options) : DbContext(options)
+        {
+            public DbSet<User> Users => Set<User>();
+            public DbSet<Post> Posts => Set<Post>();
+            public DbSet<Comment> Comments => Set<Comment>();
+            public DbSet<Like> Likes => Set<Like>();
         protected override void OnModelCreating(ModelBuilder m)
         {
             // User

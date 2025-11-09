@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace CommunityBoard.Validation
+namespace CommunityBoard.Validation.Validator
 {
     public class CreateCommentRequestValidator : AbstractValidator<CreateCommentRequest>
     {

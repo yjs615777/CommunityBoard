@@ -24,7 +24,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unhandled");
+            logger.LogError(ex, "Unhandled");   
             await Write(ctx, HttpStatusCode.InternalServerError, Result<object>.Fail("server_error", "Unexpected server error"));
         }
     }
