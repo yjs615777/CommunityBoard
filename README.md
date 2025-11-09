@@ -143,14 +143,19 @@ AWS EC2 + Docker + Caddy + GoDaddy로 실제 배포까지 완주하면서 DevOps
 - 아쉬운점 / 보완할 부분
   
 Validation 시스템 혼용:
+
 DataAnnotations(Attribute)와 FluentValidation을 동시에 사용해 ModelState 중복 오류 발생시킬 수 있다
 Attribute와 Validator는 둘중하나만 쓰는게 권장된다는걸 배웠다
+
 DTO 설계 혼동 (Request vs Response) :
+
 클라이언트에서 서버로 실제 입력하는 값은 Request
 서버에서 클라이언트로 값을 가져오는 것은 Response로 실제 구현하다보니 DTO를 분리하여 관리하는 이유를 정확하게 이해했다
 API의 입출력 명세가 명확해지고, 보안상 숨겨야 할 데이터(PasswordHash 등) 가 Response에 포함되는 실수를 방지할 수 있으며,
 Controller나 Service에서 단방향(입력은 Request DTO로만 받고, 출력은 Response/Result로만 내보내는 단방향) 데이터 흐름을 더 안전하게 유지할 수 있다.
+
 Record 와 Property 개념 혼동:
+
 record는 데이터 타입(틀) 을 정의하는 키워드인데, 한동안 프로퍼티와 동급 개념으로 착각했다
 Entity/도메인,Request(검증 필요),행동(메서드)상태 변경이 필요한 타입이라면 class
 Response/조회 전용 DTO,보여줄(읽기 전용)이라면 recrod를 써서 안전하고 간결하게 만들 수 있다는 것을 배웠다
