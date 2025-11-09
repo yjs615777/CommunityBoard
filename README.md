@@ -135,11 +135,13 @@ Let’s Encrypt SSL 자동 발급, docker logs -f caddy 로 인증 절차 확인
 
 ## 프로젝트 회고 & 피드백 
 - 잘된 점
+  
 프로젝트 전반 구조(Entities → Repositories → Services → Controllers)가 깔끔하게 분리되어 유지보수가 쉬웠음
 Swagger, GlobalExceptionMiddleware, ValidationFilter 등 실무 패턴을 직접 구현해보며 구조 이해도 향상
 AWS EC2 + Docker + Caddy + GoDaddy로 실제 배포까지 완주하면서 DevOps 흐름 전반을 경험
 
 - 아쉬운점 / 보완할 부분
+  
 Validation 시스템 혼용:
 DataAnnotations(Attribute)와 FluentValidation을 동시에 사용해 ModelState 중복 오류 발생시킬 수 있다
 Attribute와 Validator는 둘중하나만 쓰는게 권장된다는걸 배웠다
