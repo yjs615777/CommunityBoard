@@ -1,4 +1,6 @@
-﻿using CommunityBoard.Validation;
+﻿
+
+using CommunityBoard.Validation.Attribute;
 
 namespace CommunityBoard.Contracts.Requests;
 

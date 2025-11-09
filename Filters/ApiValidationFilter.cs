@@ -7,6 +7,10 @@ namespace CommunityBoard.Filters
     {
         public void OnActionExecuting(ActionExecutingContext context)
         {
+            if (context.HttpContext.Items.TryGetValue("SkipValidationFilter", out var skip)
+                && skip is bool b && b)
+                return;
+
             //  ApiController 속성이 붙은 컨트롤러만 검사
             var isApiController =
                 context.Controller.GetType().IsDefined(typeof(ApiControllerAttribute), inherit: true);
