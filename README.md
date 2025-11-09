@@ -3,6 +3,7 @@
 ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이션
 사용자 회원가입 / 로그인 / 게시글 / 댓글 / 좋아요(중복방지) 기능을 구현한 연습 프로젝트 입니다.
 
+
 ## 프로젝트 개요
 
 - CommunityBoard는 회사 내부에서 사용할 수 있는
@@ -14,6 +15,15 @@ ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이
 - 좋아요(Like) — 댓글에 좋아요를 누를 수 있으며,
 같은 사용자는 한 댓글에 한 번만 좋아요를 누를 수 있습니다 (중복방지 로직 포함).
 - 관리자(Admin) — Role 기반 권한(Role: User / Admin) 구조로 관리 기능 확장 가능.
+
+## 프로젝트 환경
+- ASP.NET Core 8.0 (C#)
+- Microsoft SQL Server (AWS RDS)
+- Entity Framework Core 8.0
+- AWS EC2 (Amazon Linux 2023)
+- Visual Studio 2022, GitHub, AWS CLI, PowerShell
+- GoDaddy 도메인 + Let’s Encrypt SSL
+- Docker, Docker Compose
 
 ## 개발일지
 
