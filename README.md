@@ -18,6 +18,8 @@ ASP.NET Core MVC + Entity Framework Core 기반의 웹 게시판 애플리케이
 - 관리자(Admin) — Role 기반 권한(Role: User / Admin) 구조로 관리 기능 확장 가능.
 
 ## 프로젝트 환경
+- Miro: [https://miro.com/app/board/uXjVJ2_75Y4=/](https://miro.com/app/board/uXjVJ2_75Y4=/?share_link_id=607163525595)
+- figma:: https://www.figma.com/design/41SZ6o0OI0TTSAHU32LVZC/CommunityBoard?t=oGZSIm4Hwwdtfgea-0
 - ASP.NET Core 8.0 (C#)
 - Microsoft SQL Server (AWS RDS)
 - Entity Framework Core 8.0
